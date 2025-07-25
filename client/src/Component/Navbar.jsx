@@ -1,57 +1,56 @@
-import React from 'react';
+import React from "react";
+import { FiSearch, FiHeart, FiShoppingCart, FiUser } from "react-icons/fi";
 
 const Navbar = () => {
   return (
-    <nav className="bg-white shadow-lg">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="flex justify-between items-center py-4">
-          {/* Logo */}
-          <div>
-            <a href="#" className="text-2xl font-bold text-gray-800">SIDHATVA</a>
-          </div>
+    <div className="sticky top-0 z-50 bg-white border-b border-gray-200">
+      <div className="container mx-auto flex items-center justify-between h-16 px-6 font-sans text-sm text-gray-800">
+        {/* Left Section: Logo */}
+        <div className="flex items-center space-x-2">
+          <span className="text-[#B3ECFF] text-xl font-semibold">Sidhatva</span>
+          <span className="text-yellow-400 text-lg">✨</span>
+        </div>
 
-          {/* Primary Nav */}
-          <div className="hidden md:flex items-center space-x-1">
-            <a href="#" className="py-2 px-3 text-gray-700 hover:text-gray-900 font-medium">Home</a>
-            <a href="#" className="py-2 px-3 text-gray-700 hover:text-gray-900 font-medium">Furniture</a>
-            <a href="#" className="py-2 px-3 text-gray-700 hover:text-gray-900 font-medium">Storage & Organization</a>
-            <a href="#" className="py-2 px-3 text-gray-700 hover:text-gray-900 font-medium">Sofas</a>
-            <a href="#" className="py-2 px-3 text-gray-700 hover:text-gray-900 font-medium">Office Furniture</a>
-            <a href="#" className="py-2 px-3 text-gray-700 hover:text-gray-900 font-medium">About Us</a>
-            <a href="#" className="py-2 px-3 text-gray-700 hover:text-gray-900 font-medium">Contact</a>
-          </div>
+        {/* Center Links */}
+        <div className="flex space-x-6 font-medium">
+          <a href="#" className="hover:text-blue-500">Home</a>
+          <a href="#" className="hover:text-blue-500">Furniture</a>
+          <a href="#" className="hover:text-blue-500">Sofas</a>
+          <a href="#" className="hover:text-blue-500">About</a>
+          <a href="#" className="hover:text-blue-500">Contact</a>
+        </div>
 
-          {/* Secondary Nav (e.g., Cart/Login) */}
-          <div className="hidden md:flex items-center space-x-1">
-            <a href="#" className="py-2 px-3 text-gray-700 hover:text-gray-900">
-              <svg className="h-6 w-6" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
-                <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.182 1.703.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
-              </svg>
-            </a>
-            <a href="#" className="py-2 px-3 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition duration-300">Sign In</a>
-          </div>
-
-          {/* Mobile button */}
-          <div className="md:hidden flex items-center">
-            <button className="mobile-menu-button">
-              <svg className="h-6 w-6" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
-                <path d="M4 6h16M4 12h16M4 18h16"></path>
-              </svg>
-            </button>
+        {/* Search Box */}
+        <div className="flex items-center flex-1 max-w-lg mx-6">
+          <div className="flex items-center bg-[#f9fcfd] border border-[#e8f7fb] rounded-md px-3 py-2 w-full">
+            <FiSearch className="text-gray-500 mr-2" />
+            <input
+              type="text"
+              placeholder="Search for furniture, décor, and more..."
+              className="w-full bg-transparent outline-none text-sm text-gray-700 placeholder:text-gray-400"
+            />
           </div>
         </div>
 
-        {/* Mobile Menu */}
-        <div className="mobile-menu hidden md:hidden">
-          <a href="#" className="block py-2 px-4 text-sm hover:bg-gray-200">Home</a>
-          <a href="#" className="block py-2 px-4 text-sm hover:bg-gray-200">Furniture</a>
-          <a href="#" className="block py-2 px-4 text-sm hover:bg-gray-200">Interior Design</a>
-          <a href="#" className="block py-2 px-4 text-sm hover:bg-gray-200">About Us</a>
-          <a href="#" className="block py-2 px-4 text-sm hover:bg-gray-200">Contact</a>
-          <a href="#" className="block py-2 px-4 text-sm hover:bg-gray-200">Sign In</a>
+        {/* Right Icons */}
+        <div className="flex items-center space-x-4">
+          <FiHeart className="text-xl" />
+          <div className="relative">
+            <FiShoppingCart className="text-xl" />
+            <span className="absolute -top-2 -right-2 bg-[#B3ECFF] text-xs text-black w-5 h-5 rounded-full flex items-center justify-center">
+              0
+            </span>
+          </div>
+          <button className="flex items-center bg-[#f9fcfd] border border-[#e8f7fb] px-3 py-1.5 rounded-md">
+            <FiUser className="mr-1" />
+            <span className="text-sm font-medium">Sign In</span>
+          </button>
         </div>
       </div>
-    </nav>
+
+      {/* Horizontal Line */}
+      <hr className="border-t border-gray-200" />
+    </div>
   );
 };
 
