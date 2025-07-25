@@ -1,20 +1,25 @@
-import './App.css'
+// App.jsx
+import React, { Suspense, lazy } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
-import Home from './Pages/Home';
 import Navbar from './Component/Navbar';
+import Loader from './ui/Loader'; // used as fallback
+import './App.css';
+
+const Home = lazy(() => import('./Pages/Home'));
 
 const App = () => {
-
   return (
-    <BrowserRouter>
+    <Router>
       <Navbar />
-      <Routes>
-        <Route path='/' element={<Home/>}/>
-      </Routes>
-    </BrowserRouter>
+      <Suspense fallback={<Loader />}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          
+        </Routes>
+      </Suspense>
+    </Router>
   );
-}
+};
 
 export default App;
-

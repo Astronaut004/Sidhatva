@@ -7,7 +7,7 @@ const Navbar = () => {
       <div className="container mx-auto flex items-center justify-between h-20 px-8 font-sans text-base text-gray-800">
         {/* Logo */}
         <div className="flex items-center space-x-2">
-          <span className="text-[#B3ECFF] text-2xl font-semibold">Sidhatva</span>
+          <span className="text-sky-400 text-2xl font-semibold">Sidhatva</span>
           <span className="text-yellow-400 text-xl">✨</span>
         </div>
 
@@ -22,7 +22,7 @@ const Navbar = () => {
 
         {/* Search */}
         <div className="flex items-center flex-1 max-w-lg mx-8">
-          <div className="flex items-center bg-[#f9fcfd] border border-[#e8f7fb] rounded-md px-3 py-2 w-full">
+          <div className="flex items-center bg-[#f9fcfd] border border-[#e8f7fb] rounded-md px-3 py-2 w-full focus-within:ring-2 focus-within:ring-sky-400 focus-within:border-sky-400">
             <FiSearch className="text-gray-500 mr-2 text-lg" />
             <input
               type="text"
@@ -32,6 +32,7 @@ const Navbar = () => {
           </div>
         </div>
 
+
         {/* Right Icons */}
         <div className="flex items-center space-x-4">
           <div className="p-2 rounded-full cursor-pointer hover:bg-[#e8f7fb] transition">
@@ -40,7 +41,7 @@ const Navbar = () => {
 
           <div className="relative p-2 rounded-full cursor-pointer hover:bg-[#e8f7fb] transition">
             <FiShoppingCart className="text-2xl" />
-            <span className="absolute -top-2 -right-2 bg-[#B3ECFF] text-xs text-black w-5 h-5 rounded-full flex items-center justify-center">
+            <span className="absolute -top-2 -right-2 bg-sky-400 text-xs text-black w-5 h-5 rounded-full flex items-center justify-center">
               0
             </span>
           </div>
