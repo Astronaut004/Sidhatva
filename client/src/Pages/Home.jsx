@@ -1,110 +1,207 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const Home = () => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className="font-sans antialiased text-gray-900">
+    <div>
       {/* Hero Section */}
-      <section className="relative bg-cover bg-center h-screen flex items-center justify-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1555041409-f74c945b5179?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')" }}>
-        <div className="absolute inset-0 bg-black opacity-50"></div>
-        <div className="relative z-10 text-center text-white p-8">
-          <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-4">Discover Your Perfect Furniture</h1>
-          <p className="text-xl md:text-2xl mb-8">Quality Furniture for Every Style and Space</p>
-          <button className="bg-white text-gray-900 px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-200 transition duration-300">Shop Now</button>
-        </div>
-      </section>
+      <div className="bg-sky-50 min-h-screen flex items-center justify-center px-6 py-12 font-sans">
+        <div className="container mx-auto flex flex-col md:flex-row items-center gap-12">
+          {/* Left Section */}
+          <div className="flex-1 text-center md:text-left">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">
+              Transform Your <br />
+              <span className="text-sky-500">Living Space</span>
+            </h1>
+            <p className="text-gray-600 mt-4 text-lg">
+              Discover premium furniture and home décor that brings <br className="hidden md:block" />
+              comfort, style, and personality to every corner of your home.
+            </p>
 
-      {/* About Us Section */}
-      <section className="py-20 bg-gray-100">
-        <div className="max-w-6xl mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-6">About SIDHATVA Furniture</h2>
-          <p className="text-lg text-gray-700 leading-relaxed mb-8">
-            SIDHATVA is your premier destination for high-quality furniture that blends comfort, style, and durability. 
-            We offer a wide selection of pieces for every room in your home, from modern minimalist designs to timeless classics. 
-            Our commitment is to help you create spaces that are not only beautiful but also truly reflect your personal taste and lifestyle.
-          </p>
-          <button className="bg-gray-800 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-gray-700 transition duration-300">Our Story</button>
-        </div>
-      </section>
+            {/* Buttons Container */}
+            <div className="mt-6 flex flex-wrap items-center justify-center md:justify-start gap-4">
+              {/* Dropdown */}
+              <div className="relative inline-block text-left">
+                {/* Toggle Button */}
+                <button
+                  onClick={() => setIsOpen(!isOpen)}
+                  className="inline-flex justify-center items-center px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50"
+                >
+                  🛒 Browse Categories ▾
+                </button>
 
-      {/* Furniture Categories Section */}
-      <section className="py-20">
-        <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12">Explore Our Furniture Categories</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Category Card 1: Living Room */}
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-              <img src="https://images.unsplash.com/photo-1593044277386-5204277386?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Living Room Furniture" className="w-full h-64 object-cover"/>
-              <div className="p-6 text-center">
-                <h3 className="text-2xl font-semibold mb-2">Living Room</h3>
-                <p className="text-gray-700 mb-4">Sofas, coffee tables, TV units, and more to create your perfect living space.</p>
-                <a href="#" className="text-blue-600 hover:underline">Shop Living Room</a>
+                {/* Dropdown Menu */}
+                {isOpen && (
+                  <div className="absolute mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
+                    <div className="py-1 text-sm text-gray-700">
+                      <a href="#" className="block px-4 py-2 hover:bg-gray-100">🛋️ All Categories</a>
+                      <a href="#" className="block px-4 py-2 hover:bg-gray-100">🪑 Sofas & Seating</a>
+                      <a href="#" className="block px-4 py-2 hover:bg-gray-100">🛏️ Beds & Mattresses</a>
+                      <a href="#" className="block px-4 py-2 hover:bg-gray-100">🍽️ Dining & Kitchen</a>
+                      <a href="#" className="block px-4 py-2 hover:bg-gray-100">💡 Lighting & Décor</a>
+                    </div>
+                  </div>
+                )}
               </div>
+
+              {/* Shop Now Button */}
+              <button className="px-6 py-3 bg-sky-500 text-white font-semibold rounded-md shadow hover:bg-sky-600 transition duration-300">
+                Shop Now →
+              </button>
             </div>
-            {/* Category Card 2: Bedroom */}
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-              <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Bedroom Furniture" className="w-full h-64 object-cover"/>
-              <div className="p-6 text-center">
-                <h3 className="text-2xl font-semibold mb-2">Bedroom</h3>
-                <p className="text-gray-700 mb-4">Beds, wardrobes, nightstands, and dressers for a serene retreat.</p>
-                <a href="#" className="text-blue-600 hover:underline">Shop Bedroom</a>
-              </div>
+
+            {/* Quality Tag */}
+            <div className="mt-4 text-sm text-sky-600 font-medium flex items-center justify-center md:justify-start gap-2">
+              <span className="w-2 h-2 bg-sky-500 rounded-full inline-block"></span>
+              Premium Quality
             </div>
-            {/* Category Card 3: Dining Room */}
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-              <img src="https://images.unsplash.com/photo-1592078615290-03ee24f624e5?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Dining Room Furniture" className="w-full h-64 object-cover"/>
-              <div className="p-6 text-center">
-                <h3 className="text-2xl font-semibold mb-2">Dining Room</h3>
-                <p className="text-gray-700 mb-4">Dining tables, chairs, and buffets for memorable meals.</p>
-                <a href="#" className="text-blue-600 hover:underline">Shop Dining Room</a>
-              </div>
-            </div>
-            {/* Category Card 4: Storage & Organization */}
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-              <img src="https://images.unsplash.com/photo-1528731708534-816fe59f90d4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Storage & Organization" className="w-full h-64 object-cover"/>
-              <div className="p-6 text-center">
-                <h3 className="text-2xl font-semibold mb-2">Storage & Organization</h3>
-                <p className="text-gray-700 mb-4">Shelves, cabinets, and drawers to keep your home tidy and stylish.</p>
-                <a href="#" className="text-blue-600 hover:underline">Shop Storage</a>
-              </div>
-            </div>
-            {/* Category Card 5: Sofas */}
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-              <img src="https://images.unsplash.com/photo-1555041409-f74c945b5179?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Sofas" className="w-full h-64 object-cover"/>
-              <div className="p-6 text-center">
-                <h3 className="text-2xl font-semibold mb-2">Sofas</h3>
-                <p className="text-gray-700 mb-4">Comfortable and stylish sofas for every living room.</p>
-                <a href="#" className="text-blue-600 hover:underline">Shop Sofas</a>
-              </div>
-            </div>
-            {/* Category Card 6: Office Furniture */}
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-              <img src="https://images.unsplash.com/photo-1599696848652-f08ff2465554?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Office Furniture" className="w-full h-64 object-cover"/>
-              <div className="p-6 text-center">
-                <h3 className="text-2xl font-semibold mb-2">Office Furniture</h3>
-                <p className="text-gray-700 mb-4">Desks, chairs, and storage solutions for a productive workspace.</p>
-                <a href="#" className="text-blue-600 hover:underline">Shop Office Furniture</a>
-              </div>
+          </div>
+
+          {/* Right Section */}
+          <div className="flex-1 relative">
+            <img
+              src="https://images.unsplash.com/photo-1635377316969-1c0e3c93c6d2?q=80&w=1000&auto=format&fit=crop"
+              alt="Premium Sofa"
+              className="rounded-xl shadow-lg w-full object-cover"
+            />
+            {/* Price Tag */}
+            <div className="absolute bottom-6 left-6 bg-white rounded-lg shadow px-4 py-3 text-center text-sm">
+              <p className="text-gray-500">Starting from</p>
+              <p className="text-sky-500 font-bold text-lg">₹29,999</p>
+              <p className="text-gray-600">Premium Sofas</p>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+      <div className="text-center py-12">
+  <h1 className="text-4xl font-bold text-gray-800 mb-4">Featured Products</h1>
+  <p className="text-lg text-gray-600 max-w-xl mx-auto">
+    Handpicked furniture pieces that combine style, comfort, and quality craftsmanship
+  </p>
+</div>
 
-      {/* Call to Action Section */}
-      <section className="py-20 bg-gray-800 text-white text-center">
-        <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-4xl font-bold mb-6">Find Your Perfect Piece Today!</h2>
-          <p className="text-xl mb-8">Browse our extensive catalog and transform your home with SIDHATVA furniture.</p>
-          <button className="bg-white text-gray-900 px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-200 transition duration-300">Explore All Furniture</button>
+      {/* Top Deals Section */}
+      <div className="bg-sky-50 py-12 px-4 sm:px-8 lg:px-16">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Top Deals for You</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+          {/* Product 1 */}
+          <div className="bg-white rounded-lg shadow p-4">
+            <img src="https://images.unsplash.com/photo-1602288637782-6e1d008de1a4?q=80&w=800" alt="Modern Wooden Bed" className="w-full h-48 object-cover rounded" />
+            <h3 className="text-lg font-semibold text-gray-800 mt-4">Modern Wooden Bed</h3>
+            <p className="text-sm text-gray-600 mt-1">
+              <span className="text-yellow-500 font-medium">⭐ 4.8</span> (124 reviews)
+            </p>
+            <p className="text-xl font-bold text-sky-500 mt-2">
+              ₹45,999 <span className="text-gray-400 line-through text-sm">₹52,999</span>
+            </p>
+            <p className="text-gray-600 mt-2">Elegant solid wood platform bed with built-in storage and minimalist design.</p>
+            <button className="mt-4 w-full border border-sky-400 bg-white text-sky-500 py-2 rounded hover:bg-sky-100 flex justify-center items-center gap-2">
+              🛒 Add to Cart
+            </button>
+          </div>
+
+          {/* Product 2 */}
+          <div className="bg-white rounded-lg shadow p-4">
+            <img src="https://images.unsplash.com/photo-1582582494700-040e6f9f71a5?q=80&w=800" alt="Elegant Dining Set" className="w-full h-48 object-cover rounded" />
+            <h3 className="text-lg font-semibold text-gray-800 mt-4">Elegant Dining Set</h3>
+            <p className="text-sm text-gray-600 mt-1">
+              <span className="text-yellow-500 font-medium">⭐ 4.9</span> (89 reviews)
+            </p>
+            <p className="text-xl font-bold text-sky-500 mt-2">
+              ₹89,999 <span className="text-gray-400 line-through text-sm">₹99,999</span>
+            </p>
+            <p className="text-gray-600 mt-2">Complete 6-seater dining set with solid wood table and upholstered chairs.</p>
+            <button className="mt-4 w-full border border-sky-400 bg-white text-sky-500 py-2 rounded hover:bg-sky-100 flex justify-center items-center gap-2">
+              🛒 Add to Cart
+            </button>
+          </div>
+
+          {/* Product 3 */}
+          <div className="bg-white rounded-lg shadow p-4">
+            <img src="https://images.unsplash.com/photo-1601987077675-265cc5d0b7d1?q=80&w=800" alt="Home Décor Collection" className="w-full h-48 object-cover rounded" />
+            <h3 className="text-lg font-semibold text-gray-800 mt-4">Home Décor Collection</h3>
+            <p className="text-sm text-gray-600 mt-1">
+              <span className="text-yellow-500 font-medium">⭐ 4.7</span> (67 reviews)
+            </p>
+            <p className="text-xl font-bold text-sky-500 mt-2">
+              ₹12,999 <span className="text-gray-400 line-through text-sm">₹15,999</span>
+            </p>
+            <p className="text-gray-600 mt-2">Curated collection of premium home décor accessories and lighting.</p>
+            <button className="mt-4 w-full border border-sky-400 bg-white text-sky-500 py-2 rounded hover:bg-sky-100 flex justify-center items-center gap-2">
+              🛒 Add to Cart
+            </button>
+          </div>
         </div>
-      </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-10">
-        <div className="max-w-6xl mx-auto px-4 text-center text-gray-400">
-          <p>&copy; {new Date().getFullYear()} SIDHATVA Furniture. All rights reserved.</p>
-          <div className="mt-4 space-x-4">
-            <a href="#" className="hover:text-white">Privacy Policy</a>
-            <a href="#" className="hover:text-white">Terms of Service</a>
+        {/* View All Products Button */}
+        <div className="text-center mt-10">
+          <button className="px-6 py-2 bg-sky-500 hover:bg-sky-600 text-white rounded shadow">
+            View All Products
+          </button>
+        </div>
+      </div>
+      <footer className="bg-sky-100 text-gray-800 px-6 md:px-16 py-10">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {/* Brand Info */}
+          <div>
+            <h2 className="text-xl font-bold mb-2">Sidhatva</h2>
+            <p className="mb-4">
+              Designing spaces with soul. Premium furniture and home décor for modern living.
+            </p>
+            <p className="text-sm flex items-center gap-1">
+              Made with <span className="text-red-600 text-lg">❤️</span> in India
+            </p>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h3 className="font-semibold mb-3">Quick Links</h3>
+            <ul className="space-y-2 text-sm">
+              <li><a href="#" className="hover:underline">About Us</a></li>
+              <li><a href="#" className="hover:underline">Furniture</a></li>
+              <li><a href="#" className="hover:underline">Sofas</a></li>
+              <li><a href="#" className="hover:underline">Contact</a></li>
+            </ul>
+          </div>
+
+          {/* Customer Service */}
+          <div>
+            <h3 className="font-semibold mb-3">Customer Service</h3>
+            <ul className="space-y-2 text-sm">
+              <li><a href="#" className="hover:underline">Help Center</a></li>
+              <li><a href="#" className="hover:underline">Returns</a></li>
+              <li><a href="#" className="hover:underline">Shipping Info</a></li>
+              <li><a href="#" className="hover:underline">Track Order</a></li>
+            </ul>
+          </div>
+
+          {/* Newsletter */}
+          <div>
+            <h3 className="font-semibold mb-3">Stay Updated</h3>
+            <p className="text-sm mb-3">
+              Subscribe to get updates on new arrivals and exclusive offers.
+            </p>
+            <div className="flex">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="w-full px-3 py-2 rounded-l-md bg-sky-200 text-sm outline-none"
+              />
+              <button className="bg-white px-4 py-2 text-sm font-medium rounded-r-md shadow hover:bg-sky-200 transition">
+                Subscribe
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Line */}
+        <div className="border-t mt-10 pt-4 flex flex-col md:flex-row justify-between text-sm text-gray-600">
+          <p>© 2025 Sidhatva. All rights reserved.</p>
+          <div className="flex space-x-4 mt-2 md:mt-0">
+            <a href="#" className="hover:underline">Privacy Policy</a>
+            <a href="#" className="hover:underline">Terms of Service</a>
+            <a href="#" className="hover:underline">Cookies</a>
           </div>
         </div>
       </footer>
