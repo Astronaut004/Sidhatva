@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { FiSearch, FiHeart, FiShoppingCart, FiUser } from "react-icons/fi";
 
 const Navbar = () => {
@@ -13,11 +14,11 @@ const Navbar = () => {
 
         {/* Navigation Links */}
         <div className="flex space-x-8 font-medium">
-          <a href="#" className="hover:text-blue-500">Home</a>
-          <a href="#" className="hover:text-blue-500">Furniture</a>
-          <a href="#" className="hover:text-blue-500">Sofas</a>
-          <a href="#" className="hover:text-blue-500">About</a>
-          <a href="#" className="hover:text-blue-500">Contact</a>
+          <Link to="/" className="hover:text-blue-500">Home</Link>
+          <Link to="/furniture" className="hover:text-blue-500">Furniture</Link>
+          <Link to="/Sofa" className="hover:text-blue-500">Sofa</Link>
+          <Link to="/About" className="hover:text-blue-500">About</Link>
+          <Link to="/Contact" className="hover:text-blue-500">Contact</Link>
         </div>
 
         {/* Search */}
