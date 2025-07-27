@@ -32,8 +32,8 @@ const Navbar = () => {
           <div className="hidden md:flex space-x-6 lg:space-x-8 font-medium">
             <Link to='/' >Home</Link>
             <Link to='/furniture' >Furniture</Link>
-            <Link to='/Sofa' >Glow & Power</Link>
-            <Link to='/Sofa' >Luxury Decor</Link>
+            <Link to='/Electronics' >Glow & Power</Link>
+            <Link to='/Electronics' >Luxury Decor</Link>
             <Link to='/About' >About</Link>
             <Link to='/Contact' >Contact</Link>
           </div>
@@ -98,8 +98,8 @@ const Navbar = () => {
             <div className="flex flex-col px-4 py-3 space-y-4">
               <Link to='/' className="py-2 hover:text-blue-500 transition" >Home</Link>
               <Link to='/furniture' className="py-2 hover:text-blue-500 transition" >Furniture</Link>
-              <Link to='/Sofa' className="py-2 hover:text-blue-500 transition" >Glow & Power</Link>
-              <Link to='/Sofa' className="py-2 hover:text-blue-500 transition" >Luxury Decor</Link>
+              <Link to='/Electronics' className="py-2 hover:text-blue-500 transition" >Glow & Power</Link>
+              <Link to='/Electronics' className="py-2 hover:text-blue-500 transition" >Luxury Decor</Link>
               <Link to='/About' className="py-2 hover:text-blue-500 transition" >About</Link>
               <Link to='/Contact' className="py-2 hover:text-blue-500 transition" >Contact</Link>
               <div className="flex items-center pt-2 space-x-4">
