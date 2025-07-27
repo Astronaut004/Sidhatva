@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FiSearch, FiHeart, FiShoppingCart, FiUser, FiMenu, FiX } from "react-icons/fi";
 import { Link } from 'react-router-dom';
-  
+
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,13 +15,13 @@ const Navbar = () => {
           {/* Logo and Mobile Menu Button */}
           <div className="flex items-center">
             {/* Mobile Menu Button - visible on small screens */}
-            <button 
+            <button
               className="md:hidden p-2 rounded-md hover:bg-gray-100 mr-2"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
             </button>
-            
+
             <div className="flex items-center space-x-2">
               <span className="text-sky-400 text-2xl font-semibold">Sidhatva</span>
               <span className="text-yellow-400 text-xl">✨</span>
@@ -32,7 +32,8 @@ const Navbar = () => {
           <div className="hidden md:flex space-x-6 lg:space-x-8 font-medium">
             <Link to='/' >Home</Link>
             <Link to='/furniture' >Furniture</Link>
-            <Link to='/Sofa' >Sofas</Link>
+            <Link to='/Sofa' >Glow & Power</Link>
+            <Link to='/Sofa' >Luxury Decor</Link>
             <Link to='/About' >About</Link>
             <Link to='/Contact' >Contact</Link>
           </div>
@@ -52,7 +53,7 @@ const Navbar = () => {
           {/* Right Icons */}
           <div className="flex items-center space-x-2 sm:space-x-4">
             {/* Mobile Search Button */}
-            <button 
+            <button
               className="lg:hidden p-2 rounded-full hover:bg-[#e8f7fb] transition"
               onClick={() => setIsSearchOpen(!isSearchOpen)}
             >
@@ -95,19 +96,13 @@ const Navbar = () => {
         {isMenuOpen && (
           <div className="md:hidden bg-white border-t border-gray-200">
             <div className="flex flex-col px-4 py-3 space-y-4">
-              <a href="#" className="py-2 hover:text-blue-500 transition">Home</a>
-              <a href="#" className="py-2 hover:text-blue-500 transition">Furniture</a>
-              <a href="#" className="py-2 hover:text-blue-500 transition">Sofas</a>
-              <a href="#" className="py-2 hover:text-blue-500 transition">About</a>
-              <a href="#" className="py-2 hover:text-blue-500 transition">Contact</a>
+              <Link to='/' className="py-2 hover:text-blue-500 transition" >Home</Link>
+              <Link to='/furniture' className="py-2 hover:text-blue-500 transition" >Furniture</Link>
+              <Link to='/Sofa' className="py-2 hover:text-blue-500 transition" >Glow & Power</Link>
+              <Link to='/Sofa' className="py-2 hover:text-blue-500 transition" >Luxury Decor</Link>
+              <Link to='/About' className="py-2 hover:text-blue-500 transition" >About</Link>
+              <Link to='/Contact' className="py-2 hover:text-blue-500 transition" >Contact</Link>
               <div className="flex items-center pt-2 space-x-4">
-                {/* <FiHeart className="text-2xl" /> */}
-                {/* <div className="relative">
-                  <FiShoppingCart className="text-2xl" />
-                  <span className="absolute -top-2 -right-2 bg-sky-400 text-xs text-black w-5 h-5 rounded-full flex items-center justify-center">
-                    0
-                  </span>
-                </div> */}
                 <button className="flex items-center bg-[#f9fcfd] border border-[#e8f7fb] px-3 py-1.5 rounded-md hover:bg-[#e8f7fb] cursor-pointer transition">
                   <FiUser className="mr-1 text-lg" />
                   <span className="text-base font-medium">Sign In</span>
