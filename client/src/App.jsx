@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './Component/Navbar';
 import Footer from './Component/Footer';
 import Loader from './ui/Loader'; // used as fallback
+import Reset from './ui/Reset';
 import './App.css';
 
 const Home = lazy(() => import('./Pages/Home'));
@@ -21,6 +22,7 @@ const Wishlist = lazy(() => import('./Pages/Wishlist'));
 const App = () => {
   return (
     <Router>
+      <Reset />
       <Navbar />
       <Suspense fallback={<Loader />}>
         <Routes>
@@ -34,6 +36,7 @@ const App = () => {
           <Route path='login' element={<Login />} />
           <Route path='/cart' element={<Cart />} />
           <Route path='/wishlist' element={<Wishlist/>} />
+          <Route path="*" element={<div>404 Page Not Found</div>} />
         </Routes>
         <Footer/>
       </Suspense>
@@ -42,3 +45,6 @@ const App = () => {
 };
 
 export default App;
+
+
+// import HomeDecor from './Pages/HomeDecor'; // no lazy()
