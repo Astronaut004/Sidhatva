@@ -3,6 +3,7 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Navbar from './Component/Navbar';
+import Footer from './Component/Footer';
 import Loader from './ui/Loader'; // used as fallback
 import './App.css';
 
@@ -11,6 +12,7 @@ const Furniture = lazy(() => import('./Pages/furniture'));
 const About = lazy(() => import('./Pages/About'));
 const Electronics = lazy(() => import('./Pages/Electronics'));
 const Contact = lazy(() => import('./Pages/Contact'));
+const HomeDecor = lazy(()=> import('./Pages/HomeDecor'));
 
 const App = () => {
   return (
@@ -22,8 +24,10 @@ const App = () => {
           <Route path="/furniture" element={<Furniture />} />
           <Route path="/About" element={<About />} />
           <Route path="/Electronics" element={<Electronics />} />
+          <Route path='decor' element ={<HomeDecor />} />
           <Route path="/Contact" element={<Contact />} />
         </Routes>
+        <Footer/>
       </Suspense>
     </Router>
   );
