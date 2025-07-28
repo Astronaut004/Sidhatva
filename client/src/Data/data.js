@@ -538,3 +538,136 @@ export const home_decor = [
   }
 ];
 
+export const cart = [
+  {
+    image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=1170&auto=format&fit=crop',
+    heading: 'Modern Floor Lamp',
+    tag: 'bestseller',
+    rating: 4.7,
+    review_count: 190,
+    price: 7499,
+    Ac_price: 5999,
+    desc: 'Elegant LED floor lamp with adjustable brightness and a minimalistic design.',
+    img_head: 'Illuminate Your Space',
+    img_attribute: 'Unsplash - @spacejoy',
+    type: 'lighting'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1615874959474-d609969aabc7?q=80&w=1170&auto=format&fit=crop',
+    heading: 'Bohemian Wall Tapestry',
+    tag: 'hot',
+    rating: 4.8,
+    review_count: 240,
+    price: 2199,
+    Ac_price: 1799,
+    desc: 'Artistic wall tapestry featuring mandala design to add a boho touch.',
+    img_head: 'Art on the Wall',
+    img_attribute: 'Unsplash - @minhphamdesign',
+    type: 'wall decor'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1595526114035-6d30e57fe3f4?q=80&w=1170&auto=format&fit=crop',
+    heading: 'Decorative Ceramic Vases (Set of 3)',
+    tag: 'new',
+    rating: 4.6,
+    review_count: 120,
+    price: 3499,
+    Ac_price: 2799,
+    desc: 'Handcrafted ceramic vases perfect for dry flowers or standalone decor.',
+    img_head: 'Minimal Elegance',
+    img_attribute: 'Unsplash - @katie_dickens',
+    type: 'vase'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1623718690034-eed42db2f883?q=80&w=1170&auto=format&fit=crop',
+    heading: 'Antique Wall Clock',
+    tag: 'featured',
+    rating: 4.5,
+    review_count: 95,
+    price: 4999,
+    Ac_price: 4199,
+    desc: 'Vintage-style wall clock with Roman numerals and distressed wood finish.',
+    img_head: 'Timeless Decor',
+    img_attribute: 'Unsplash - @sincerelymedia',
+    type: 'wall decor'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1586023492122-b8d6b0c27fcd?q=80&w=1170&auto=format&fit=crop',
+    heading: 'Indoor Plant Set',
+    tag: 'bestseller',
+    rating: 4.9,
+    review_count: 310,
+    price: 2999,
+    Ac_price: 2499,
+    desc: 'Set of 3 low-maintenance indoor plants in stylish ceramic pots.',
+    img_head: 'Green Vibes',
+    img_attribute: 'Unsplash - @huyphan2602',
+    type: 'plant'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c43?q=80&w=1170&auto=format&fit=crop',
+    heading: 'Rustic Wooden Coffee Table',
+    tag: '10%',
+    rating: 4.6,
+    review_count: 140,
+    price: 12500,
+    Ac_price: 11200,
+    desc: 'Handcrafted solid wood coffee table with a rustic finish.',
+    img_head: 'Centerpiece of Comfort',
+    img_attribute: 'Unsplash - @spacejoy',
+    type: 'furniture'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?q=80&w=1170&auto=format&fit=crop',
+    heading: 'Cotton Throw Blanket',
+    tag: 'sale',
+    rating: 4.5,
+    review_count: 85,
+    price: 2499,
+    Ac_price: 1999,
+    desc: 'Soft, breathable throw blanket for sofas or beds, perfect for cozy evenings.',
+    img_head: 'Warm & Stylish',
+    img_attribute: 'Unsplash - @the_modern_home',
+    type: 'textile'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1170&auto=format&fit=crop',
+    heading: 'Framed Abstract Wall Art',
+    tag: 'new',
+    rating: 4.4,
+    review_count: 110,
+    price: 3599,
+    Ac_price: 2999,
+    desc: 'Modern abstract wall art in sleek black frames for contemporary decor.',
+    img_head: 'Modern Aesthetics',
+    img_attribute: 'Unsplash - @dominikmartin',
+    type: 'art'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1170&auto=format&fit=crop',
+    heading: 'Nordic Style Area Rug',
+    tag: 'featured',
+    rating: 4.7,
+    review_count: 175,
+    price: 6999,
+    Ac_price: 5999,
+    desc: 'Soft Nordic pattern rug that brings warmth and character to your floor.',
+    img_head: 'Style Underfoot',
+    img_attribute: 'Unsplash - @alexandermils',
+    type: 'rug'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1598300051101-9b63c03cb658?q=80&w=1170&auto=format&fit=crop',
+    heading: 'Decorative Mirror with Golden Frame',
+    tag: 'hot',
+    rating: 4.8,
+    review_count: 200,
+    price: 6599,
+    Ac_price: 5499,
+    desc: 'Elegant round mirror with a gold frame, perfect for entryways or bedrooms.',
+    img_head: 'Reflect Your Style',
+    img_attribute: 'Unsplash - @spacejoy',
+    type: 'mirror'
+  }
+];
+
