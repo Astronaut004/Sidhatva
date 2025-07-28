@@ -22,10 +22,12 @@ const Navbar = () => {
               {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
             </button>
 
-            <div className="flex items-center space-x-2">
+            <Link 
+              to='/'
+              className="flex items-center space-x-2">
               <span className="text-sky-400 text-2xl font-semibold">Sidhatva</span>
               <span className="text-yellow-400 text-xl">✨</span>
-            </div>
+            </Link>
           </div>
 
           {/* Navigation Links - Desktop */}
