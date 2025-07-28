@@ -2,10 +2,42 @@ import React, { useState } from 'react';
 import { FiMail, FiLock, FiUser } from 'react-icons/fi';
 import { FcGoogle } from 'react-icons/fc';
 import { FaFacebookF } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Register = () => {
     const [email, setEmail] = useState('');
+    const [name, setName] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+    const authHandle = async (e) => {
+        e.preventDefault(); 
+
+        const payload = {
+            name: name,
+            email: email,
+            password: password
+        };
+
+        try {
+            const res = await fetch('BACKEND_API',{
+                method: POST,
+                headers: {
+                    'Content-Type': 'applications/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if(!res.ok) {
+                throw new Error('Failed to register');
+            }
+            const data = await res.json();
+            console.log('Successull', {data});
+            // use navigate 
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
     return (
         <div className="min-h-screen bg-sky-50 flex items-center justify-center p-4">
             <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
@@ -14,7 +46,7 @@ const Register = () => {
                     <p className="text-gray-500 mt-2">Join us and start exploring premium products.</p>
                 </div>
 
-                <form className="space-y-5">
+                <form onSubmit={authHandle} className="space-y-5">
                     {/* Full Name */}
                     <div className="relative">
                         <FiUser className="absolute top-1/2 left-4 -translate-y-1/2 text-gray-400" />
@@ -22,6 +54,8 @@ const Register = () => {
                             type="text"
                             placeholder="Full Name"
                             className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sky-400 focus:border-sky-400 outline-none transition"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                         />
                     </div>
 
@@ -32,6 +66,8 @@ const Register = () => {
                             type="email"
                             placeholder="Email Address"
                             className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sky-400 focus:border-sky-400 outline-none transition"
+                            value = {email}
+                            onChange ={(e) => setEmail(e.target.value)}
                         />
                     </div>
 
@@ -42,6 +78,8 @@ const Register = () => {
                             type="password"
                             placeholder="Password"
                             className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sky-400 focus:border-sky-400 outline-none transition"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
 
