@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FiHeart, FiShoppingCart, FiStar } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 const Card = ({ item }) => {
   const [showFullDescription, setShowFullDescription] = useState(false);
@@ -21,7 +22,9 @@ if (!item.tag) {
 
   return (
     <div key={item.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col h-full">
-      <div className="relative">
+      <Link 
+        to={`/item-detail/${item.id}`}
+        className="relative">
         <img
           src={item.image}
           alt={item.img_attribute}
@@ -29,23 +32,29 @@ if (!item.tag) {
         <div className="cursor-pointer absolute top-3 right-3 bg-white rounded-full p-2 shadow">
           <FiHeart className="h-5 w-5 text-gray-400 hover:text-red-500" />
         </div>
-      </div>
+      </Link>
 
       <div className="p-6 flex flex-col flex-grow">
-        <div className="flex justify-between items-start mb-2">
+        <Link 
+          to={`/item-detail/${item.id}`}
+          className="flex justify-between items-start mb-2">
           <h3 className="text-lg font-semibold text-gray-800 truncate" title={item.heading}>{item.heading}</h3>
           {item.tag && <span className={tagClasses}>{item.tag}</span>}
-        </div>
-        <div className="flex items-center mt-2">
+        </Link>
+        <Link 
+          to={`/item-detail/${item.id}`}
+          className="flex items-center mt-2">
           <div className="flex text-yellow-400">
             {[...Array(5)].map((_, i) => (
               <FiStar key={i} className="h-4 w-4" />
             ))}
           </div>
           <span className="text-gray-500 text-xs ml-1">({item.review_count} reviews)</span>
-        </div>
+        </Link>
 
-        <div className="mt-3 flex-grow">
+        <Link 
+          to={`/item-detail/${item.id}`}
+          className="mt-3 flex-grow">
           <p className={`text-gray-600 text-sm ${!showFullDescription ? 'line-clamp-2' : ''}`}>
             {item.desc}
           </p>
@@ -54,13 +63,15 @@ if (!item.tag) {
               {showFullDescription ? 'Show Less' : 'Show More'}
             </button>
           )}
-        </div>
+        </Link>
 
-        <div className="mt-4">
+        <Link 
+          to={`/item-detail/${item.id}`}
+          className="mt-4">
           <p className="text-xl font-bold text-sky-600">
             ₹{item.price} <span className="text-gray-400 line-through text-sm ml-1">₹{item.Ac_price}</span>
           </p>
-        </div>
+        </Link>
 
         <div className="mt-4">
           <button className="cursor-pointer w-full bg-white border border-sky-400 text-sky-500 py-2 rounded-lg hover:bg-sky-50 transition flex justify-center items-center gap-2">

@@ -1,5 +1,6 @@
 export const furniture = [
   {
+    id: 'Fur001',
     image: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=1170&auto=format&fit=crop',
     heading: 'Modern Wooden Bed',
     tag: 'new',
@@ -13,6 +14,7 @@ export const furniture = [
     type: 'bedroom'
   },
   {
+    id: 2,
     image: 'https://plus.unsplash.com/premium_photo-1686167993412-6e5dfafdc1f5?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     heading: 'Luxury Leather Sofa',
     tag: '10%',
@@ -26,6 +28,7 @@ export const furniture = [
     type: 'living room'
   },
   {
+    id: 3,
     image: 'https://plus.unsplash.com/premium_photo-1683543124672-6cbc571d1f31?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     heading: 'Contemporary Study Desk',
     tag: 'bestseller',
@@ -39,6 +42,7 @@ export const furniture = [
     type: 'office'
   },
   {
+    id: 4,
     image: 'https://images.unsplash.com/photo-1594404895374-f89ce340ae38?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     heading: 'Scandinavian Dining Set',
     tag: 'featured',
@@ -52,6 +56,7 @@ export const furniture = [
     type: 'dining'
   },
   {
+    id: 5,
     image: 'https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?q=80&w=1170&auto=format&fit=crop',
     heading: 'Compact Coffee Table',
     tag: 'popular',
@@ -65,6 +70,7 @@ export const furniture = [
     type: 'living room'
   },
   {
+    id: 6,
     image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1170&auto=format&fit=crop',
     heading: 'Designer Accent Chair',
     tag: 'new',
@@ -78,6 +84,7 @@ export const furniture = [
     type: 'living room'
   },
   {
+    id: 7,
     image: 'https://images.unsplash.com/photo-1594404895374-f89ce340ae38?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     heading: 'Minimalist Bookshelf',
     tag: 'hot',
@@ -91,6 +98,7 @@ export const furniture = [
     type: 'storage'
   },
   {
+    id: 8,
     image: 'https://images.unsplash.com/photo-1629078691371-2c83d139c986?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     heading: 'Classic Wardrobe',
     tag: 'sale',
@@ -104,6 +112,7 @@ export const furniture = [
     type: 'bedroom'
   },
   {
+    id: 9,
     image: 'https://images.unsplash.com/photo-1700221691428-61155b9ace87?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     heading: 'Elegant TV Unit',
     tag: 'bestseller',
@@ -117,6 +126,7 @@ export const furniture = [
     type: 'living room'
   },
   {
+    id: 10,
     image: 'https://plus.unsplash.com/premium_photo-1700502418297-535c711d63c6?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     heading: 'Floating Wall Shelves',
     tag: 'trending',
@@ -136,8 +146,10 @@ export const furniture = [
 
 
 
+
 export const featured_product = [
   {
+    id: 1,
     image: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=1170&auto=format&fit=crop',
     heading: 'Modern Wooden Bed',
     tag: '10%',
@@ -151,6 +163,7 @@ export const featured_product = [
     type: 'bedroom'
   },
   {
+    id: 2,
     image: 'https://plus.unsplash.com/premium_photo-1686167993412-6e5dfafdc1f5?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     heading: 'Luxury Leather Sofa',
     tag: 'sale',
@@ -164,6 +177,7 @@ export const featured_product = [
     type: 'living room'
   },
   {
+    id: 3,
     image: 'https://plus.unsplash.com/premium_photo-1683543124672-6cbc571d1f31?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     heading: 'Contemporary Study Desk',
     tag: 'bestseller',
@@ -177,6 +191,7 @@ export const featured_product = [
     type: 'office'
   },
   {
+    id: 4,
     image: 'https://images.unsplash.com/photo-1594404895374-f89ce340ae38?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     heading: 'Scandinavian Dining Set',
     tag: 'featured',
@@ -190,6 +205,7 @@ export const featured_product = [
     type: 'dining'
   },
   {
+    id: 5,
     image: 'https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?q=80&w=1170&auto=format&fit=crop',
     heading: 'Compact Coffee Table',
     tag: '25%',
@@ -203,6 +219,7 @@ export const featured_product = [
     type: 'living room'
   },
   {
+    id: 6,
     image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1170&auto=format&fit=crop',
     heading: 'Designer Accent Chair',
     tag: 'new',
@@ -216,6 +233,7 @@ export const featured_product = [
     type: 'living room'
   },
   {
+    id: 7,
     image: 'https://images.unsplash.com/photo-1594404895374-f89ce340ae38?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     heading: 'Minimalist Bookshelf',
     tag: 'hot',
@@ -229,6 +247,7 @@ export const featured_product = [
     type: 'storage'
   },
   {
+    id: 8,
     image: 'https://images.unsplash.com/photo-1629078691371-2c83d139c986?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     heading: 'Classic Wardrobe',
     tag: 'sale',
@@ -242,6 +261,7 @@ export const featured_product = [
     type: 'bedroom'
   },
   {
+    id: 9,
     image: 'https://images.unsplash.com/photo-1700221691428-61155b9ace87?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     heading: 'Elegant TV Unit',
     tag: 'bestseller',
@@ -255,6 +275,7 @@ export const featured_product = [
     type: 'living room'
   },
   {
+    id: 10,
     image: 'https://plus.unsplash.com/premium_photo-1700502418297-535c711d63c6?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     heading: 'Floating Wall Shelves',
     tag: 'bestseller',
@@ -271,8 +292,10 @@ export const featured_product = [
 
 
 
+
 export const electronic = [
   {
+    id: 1,
     image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1170&auto=format&fit=crop',
     heading: 'Apple MacBook Pro',
     tag: 'new',
@@ -286,6 +309,7 @@ export const electronic = [
     type: 'laptop'
   },
   {
+    id: 2,
     image: 'https://images.unsplash.com/photo-1691452194257-57e0f170c32e?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     heading: 'Samsung Smart TV 55"',
     tag: 'bestseller',
@@ -299,6 +323,7 @@ export const electronic = [
     type: 'television'
   },
   {
+    id: 3,
     image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1170&auto=format&fit=crop',
     heading: 'iPhone 14 Pro',
     tag: 'hot',
@@ -312,6 +337,7 @@ export const electronic = [
     type: 'mobile'
   },
   {
+    id: 4,
     image: 'https://images.unsplash.com/photo-1588806287985-ff6da94f854e?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     heading: 'Sony WH-1000XM5 Headphones',
     tag: 'sale',
@@ -325,6 +351,7 @@ export const electronic = [
     type: 'audio'
   },
   {
+    id: 5,
     image: 'https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?q=80&w=1170&auto=format&fit=crop',
     heading: 'Canon EOS M50 Mark II',
     tag: 'featured',
@@ -338,6 +365,7 @@ export const electronic = [
     type: 'camera'
   },
   {
+    id: 6,
     image: 'https://images.unsplash.com/photo-1558864559-ed673ba3610b?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     heading: 'Dell Inspiron 15',
     tag: '10%',
@@ -351,6 +379,7 @@ export const electronic = [
     type: 'laptop'
   },
   {
+    id: 7,
     image: 'https://images.unsplash.com/photo-1667543241882-962c812ff19e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8QW1hem9uJTIwRWNob3xlbnwwfHwwfHx8MA%3D%3D',
     heading: 'Amazon Echo Dot (5th Gen)',
     tag: 'bestseller',
@@ -364,6 +393,7 @@ export const electronic = [
     type: 'smart device'
   },
   {
+    id: 8,
     image: 'https://images.unsplash.com/photo-1510048126839-229279473365?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     heading: 'Mi Air Purifier 3',
     tag: 'new',
@@ -377,6 +407,7 @@ export const electronic = [
     type: 'appliance'
   },
   {
+    id: 9,
     image: 'https://gppro.in/wp-content/uploads/2024/11/hero-11-3.jpg',
     heading: 'GoPro HERO11 Black',
     tag: 'hot',
@@ -390,6 +421,7 @@ export const electronic = [
     type: 'camera'
   },
   {
+    id: 10,
     image: 'https://images.unsplash.com/photo-1603791440384-56cd371ee9a7?q=80&w=1170&auto=format&fit=crop',
     heading: 'Apple Watch Series 9',
     tag: 'new',
@@ -405,8 +437,10 @@ export const electronic = [
 ];
 
 
+
 export const home_decor = [
   {
+    id: 1,
     image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=1170&auto=format&fit=crop',
     heading: 'Modern Floor Lamp',
     tag: 'bestseller',
@@ -420,6 +454,7 @@ export const home_decor = [
     type: 'lighting'
   },
   {
+    id: 2,
     image: 'https://images.unsplash.com/photo-1615874959474-d609969aabc7?q=80&w=1170&auto=format&fit=crop',
     heading: 'Bohemian Wall Tapestry',
     tag: 'hot',
@@ -433,6 +468,7 @@ export const home_decor = [
     type: 'wall decor'
   },
   {
+    id: 3,
     image: 'https://images.unsplash.com/photo-1595526114035-6d30e57fe3f4?q=80&w=1170&auto=format&fit=crop',
     heading: 'Decorative Ceramic Vases (Set of 3)',
     tag: 'new',
@@ -446,6 +482,7 @@ export const home_decor = [
     type: 'vase'
   },
   {
+    id: 4,
     image: 'https://images.unsplash.com/photo-1623718690034-eed42db2f883?q=80&w=1170&auto=format&fit=crop',
     heading: 'Antique Wall Clock',
     tag: 'featured',
@@ -459,6 +496,7 @@ export const home_decor = [
     type: 'wall decor'
   },
   {
+    id: 5,
     image: 'https://images.unsplash.com/photo-1586023492122-b8d6b0c27fcd?q=80&w=1170&auto=format&fit=crop',
     heading: 'Indoor Plant Set',
     tag: 'bestseller',
@@ -472,6 +510,7 @@ export const home_decor = [
     type: 'plant'
   },
   {
+    id: 6,
     image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c43?q=80&w=1170&auto=format&fit=crop',
     heading: 'Rustic Wooden Coffee Table',
     tag: '10%',
@@ -485,6 +524,7 @@ export const home_decor = [
     type: 'furniture'
   },
   {
+    id: 7,
     image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?q=80&w=1170&auto=format&fit=crop',
     heading: 'Cotton Throw Blanket',
     tag: 'sale',
@@ -498,6 +538,7 @@ export const home_decor = [
     type: 'textile'
   },
   {
+    id: 8,
     image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1170&auto=format&fit=crop',
     heading: 'Framed Abstract Wall Art',
     tag: 'new',
@@ -511,6 +552,7 @@ export const home_decor = [
     type: 'art'
   },
   {
+    id: 9,
     image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1170&auto=format&fit=crop',
     heading: 'Nordic Style Area Rug',
     tag: 'featured',
@@ -524,6 +566,7 @@ export const home_decor = [
     type: 'rug'
   },
   {
+    id: 10,
     image: 'https://images.unsplash.com/photo-1598300051101-9b63c03cb658?q=80&w=1170&auto=format&fit=crop',
     heading: 'Decorative Mirror with Golden Frame',
     tag: 'hot',
@@ -537,9 +580,11 @@ export const home_decor = [
     type: 'mirror'
   }
 ];
+
 
 export const cart = [
   {
+    id: 1,
     image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=1170&auto=format&fit=crop',
     heading: 'Modern Floor Lamp',
     tag: 'bestseller',
@@ -553,6 +598,7 @@ export const cart = [
     type: 'lighting'
   },
   {
+    id: 2,
     image: 'https://images.unsplash.com/photo-1615874959474-d609969aabc7?q=80&w=1170&auto=format&fit=crop',
     heading: 'Bohemian Wall Tapestry',
     tag: 'hot',
@@ -566,6 +612,7 @@ export const cart = [
     type: 'wall decor'
   },
   {
+    id: 3,
     image: 'https://images.unsplash.com/photo-1595526114035-6d30e57fe3f4?q=80&w=1170&auto=format&fit=crop',
     heading: 'Decorative Ceramic Vases (Set of 3)',
     tag: 'new',
@@ -579,6 +626,7 @@ export const cart = [
     type: 'vase'
   },
   {
+    id: 4,
     image: 'https://images.unsplash.com/photo-1623718690034-eed42db2f883?q=80&w=1170&auto=format&fit=crop',
     heading: 'Antique Wall Clock',
     tag: 'featured',
@@ -592,6 +640,7 @@ export const cart = [
     type: 'wall decor'
   },
   {
+    id: 5,
     image: 'https://images.unsplash.com/photo-1586023492122-b8d6b0c27fcd?q=80&w=1170&auto=format&fit=crop',
     heading: 'Indoor Plant Set',
     tag: 'bestseller',
@@ -605,6 +654,7 @@ export const cart = [
     type: 'plant'
   },
   {
+    id: 6,
     image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c43?q=80&w=1170&auto=format&fit=crop',
     heading: 'Rustic Wooden Coffee Table',
     tag: '10%',
@@ -618,6 +668,7 @@ export const cart = [
     type: 'furniture'
   },
   {
+    id: 7,
     image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?q=80&w=1170&auto=format&fit=crop',
     heading: 'Cotton Throw Blanket',
     tag: 'sale',
@@ -631,6 +682,7 @@ export const cart = [
     type: 'textile'
   },
   {
+    id: 8,
     image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1170&auto=format&fit=crop',
     heading: 'Framed Abstract Wall Art',
     tag: 'new',
@@ -644,6 +696,7 @@ export const cart = [
     type: 'art'
   },
   {
+    id: 9,
     image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1170&auto=format&fit=crop',
     heading: 'Nordic Style Area Rug',
     tag: 'featured',
@@ -657,6 +710,7 @@ export const cart = [
     type: 'rug'
   },
   {
+    id: 10,
     image: 'https://images.unsplash.com/photo-1598300051101-9b63c03cb658?q=80&w=1170&auto=format&fit=crop',
     heading: 'Decorative Mirror with Golden Frame',
     tag: 'hot',
@@ -670,4 +724,3 @@ export const cart = [
     type: 'mirror'
   }
 ];
-
