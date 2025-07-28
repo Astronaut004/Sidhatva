@@ -33,7 +33,7 @@ const Navbar = () => {
             <Link to='/' >Home</Link>
             <Link to='/furniture' >Furniture</Link>
             <Link to='/Electronics' >Glow & Power</Link>
-            <Link to='/Electronics' >Luxury Decor</Link>
+            <Link to='/decor' >Luxury Decor</Link>
             <Link to='/About' >About</Link>
             <Link to='/Contact' >Contact</Link>
           </div>
@@ -73,7 +73,7 @@ const Navbar = () => {
 
             <button className="hidden sm:flex items-center bg-[#f9fcfd] border border-[#e8f7fb] px-3 py-1.5 rounded-md hover:bg-[#e8f7fb] cursor-pointer transition">
               <FiUser className="mr-1 text-lg" />
-              <span className="text-base font-medium">Sign In</span>
+              <Link to='login' className="text-base font-medium">Sign In</Link>
             </button>
           </div>
         </div>
@@ -99,13 +99,13 @@ const Navbar = () => {
               <Link to='/' className="py-2 hover:text-blue-500 transition" >Home</Link>
               <Link to='/furniture' className="py-2 hover:text-blue-500 transition" >Furniture</Link>
               <Link to='/Electronics' className="py-2 hover:text-blue-500 transition" >Glow & Power</Link>
-              <Link to='/Electronics' className="py-2 hover:text-blue-500 transition" >Luxury Decor</Link>
+              <Link to='/decor' className="py-2 hover:text-blue-500 transition" >Luxury Decor</Link>
               <Link to='/About' className="py-2 hover:text-blue-500 transition" >About</Link>
               <Link to='/Contact' className="py-2 hover:text-blue-500 transition" >Contact</Link>
               <div className="flex items-center pt-2 space-x-4">
                 <button className="flex items-center bg-[#f9fcfd] border border-[#e8f7fb] px-3 py-1.5 rounded-md hover:bg-[#e8f7fb] cursor-pointer transition">
                   <FiUser className="mr-1 text-lg" />
-                  <span className="text-base font-medium">Sign In</span>
+                  <Link to='login' className="text-base font-medium">Sign In</Link>
                 </button>
               </div>
             </div>
