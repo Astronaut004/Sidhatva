@@ -15,6 +15,8 @@ const Contact = lazy(() => import('./Pages/Contact'));
 const HomeDecor = lazy(()=> import('./Pages/HomeDecor'));
 const Register = lazy(() => import('./Pages/Auth/Register'));
 const Login = lazy(() => import('./Pages/Auth/Login'));
+const Cart = lazy(() => import('./Pages/Cart'));
+const Wishlist = lazy(() => import('./Pages/Wishlist'));
 
 const App = () => {
   return (
@@ -29,7 +31,9 @@ const App = () => {
           <Route path='decor' element ={<HomeDecor />} />
           <Route path="/Contact" element={<Contact />} />
           <Route path="/register" element={<Register />} />
-          <Route path='login'element={<Login />} />
+          <Route path='login' element={<Login />} />
+          <Route path='/cart' element={<Cart />} />
+          <Route path='/wishlist' element={<Wishlist/>} />
         </Routes>
         <Footer/>
       </Suspense>
