@@ -26,7 +26,7 @@ if (!item.tag) {
           src={item.image}
           alt={item.img_attribute}
           className="w-full h-64 object-cover" />
-        <div className="absolute top-3 right-3 bg-white rounded-full p-2 shadow">
+        <div className="cursor-pointer absolute top-3 right-3 bg-white rounded-full p-2 shadow">
           <FiHeart className="h-5 w-5 text-gray-400 hover:text-red-500" />
         </div>
       </div>
@@ -63,7 +63,7 @@ if (!item.tag) {
         </div>
 
         <div className="mt-4">
-          <button className="w-full bg-white border border-sky-400 text-sky-500 py-2 rounded-lg hover:bg-sky-50 transition flex justify-center items-center gap-2">
+          <button className="cursor-pointer w-full bg-white border border-sky-400 text-sky-500 py-2 rounded-lg hover:bg-sky-50 transition flex justify-center items-center gap-2">
             <FiShoppingCart className="h-5 w-5" />
             Add to Cart
           </button>
