@@ -2,9 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { featured_product } from '../Data/data';
 import Card from '../Component/Card';
 import { Link } from 'react-router-dom';
+import { useRef } from 'react';
+
 const Home = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const dropdownRef = useRef(null);
+  const [cat, setCat] = useState('Browse Categories');
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -13,6 +18,19 @@ const Home = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
 
   return (
     <div className="font-sans">
@@ -35,16 +53,16 @@ const Home = () => {
             {/* Buttons Container */}
             <div className="mt-8 flex flex-wrap items-center justify-center md:justify-start gap-4">
               {/* Dropdown */}
-              <div className="relative inline-block text-left">
+              <div className="relative inline-block text-left" ref={dropdownRef}>
                 {/* Toggle Button */}
                 <button
                   onClick={() => setIsOpen(!isOpen)}
-                  className="inline-flex justify-center items-center px-5 py-3 bg-white border border-gray-300 rounded-lg shadow-sm text-base font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                  className="cursor-pointer inline-flex justify-center items-center px-5 py-3 bg-white border border-gray-300 rounded-lg shadow-sm text-base font-medium text-gray-700 hover:bg-gray-50 transition-colors"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
                   </svg>
-                  Browse Categories
+                  {cat}
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                   </svg>
@@ -54,31 +72,66 @@ const Home = () => {
                 {isOpen && (
                   <div className="absolute mt-2 w-56 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
                     <div className="py-1">
-                      <a href="#" className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100">
+                      <a 
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setCat('All Categories')
+                          setIsOpen(false);
+                        }} 
+                        className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                         </svg>
                         All Categories
                       </a>
-                      <a href="#" className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100">
+                      <a 
+                        href="#" 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setCat('Sofas & Seating')
+                          setIsOpen(false);
+                        }}
+                        className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                         </svg>
                         Sofas & Seating
                       </a>
-                      <a href="#" className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100">
+                      <a 
+                        href="#" 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setCat('Bed & Mattresses')
+                          setIsOpen(false);
+                        }}
+                        className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                         </svg>
                         Beds & Mattresses
                       </a>
-                      <a href="#" className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100">
+                      <a 
+                        href="#" 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setCat('Dinning & Kitchen')
+                          setIsOpen(false);
+                        }}
+                        className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         Dining & Kitchen
                       </a>
-                      <a href="#" className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100">
+                      <a 
+                        href="#" 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setCat('Lighting & Decor')
+                          setIsOpen(false);
+                        }}
+                        className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                         </svg>
@@ -90,12 +143,14 @@ const Home = () => {
               </div>
 
               {/* Shop Now Button */}
-              <button className="px-8 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow hover:bg-sky-700 transition duration-300 flex items-center">
+              <Link
+                to='/furniture'
+                className="px-8 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow hover:bg-sky-700 transition duration-300 flex items-center">
                 Shop Now
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
                 </svg>
-              </button>
+              </Link>
             </div>
 
             {/* Quality Tag */}
@@ -130,19 +185,6 @@ const Home = () => {
                 <p className="text-gray-600 text-sm">Premium Sofas</p>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Brands Section */}
-      <div className="py-8 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
-            {['Featherlite', 'The Sleep Company', 'Indigo Living', 'Brand 4', 'Brand 5'].map((brand, index) => (
-              <div key={index} className="text-gray-400 font-medium text-xl opacity-70 hover:opacity-100 transition-opacity">
-                {brand}
-              </div>
-            ))}
           </div>
         </div>
       </div>
@@ -256,7 +298,7 @@ const Home = () => {
       </div>
 
       {/* Footer */}
-      
+
     </div>
   );
 };
