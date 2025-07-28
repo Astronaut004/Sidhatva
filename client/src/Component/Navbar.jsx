@@ -60,16 +60,18 @@ const Navbar = () => {
               <FiSearch className="text-xl sm:text-2xl" />
             </button>
 
-            <div className="hidden sm:block p-2 rounded-full cursor-pointer hover:bg-[#e8f7fb] transition">
+            <Link
+              to='/wishlist' 
+              className="hidden sm:block p-2 rounded-full cursor-pointer hover:bg-[#e8f7fb] transition">
               <FiHeart className="text-xl sm:text-2xl" />
-            </div>
+            </Link>
 
-            <div className="relative p-2 rounded-full cursor-pointer hover:bg-[#e8f7fb] transition">
+            <Link to='/cart' className="relative p-2 rounded-full cursor-pointer hover:bg-[#e8f7fb] transition">
               <FiShoppingCart className="text-xl sm:text-2xl" />
               <span className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 bg-sky-400 text-xs text-black w-5 h-5 rounded-full flex items-center justify-center">
                 0
               </span>
-            </div>
+            </Link>
 
             <button className="hidden sm:flex items-center bg-[#f9fcfd] border border-[#e8f7fb] px-3 py-1.5 rounded-md hover:bg-[#e8f7fb] cursor-pointer transition">
               <FiUser className="mr-1 text-lg" />
