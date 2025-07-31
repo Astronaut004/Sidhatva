@@ -1,9 +1,12 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const CartCard = ({ item, onRemove }) => {
   return (
     <div className="flex items-center justify-between gap-4 p-4 bg-white shadow-md rounded-lg">
-      <div className="flex items-center gap-4">
+      <Link 
+        to={`/item-detail/${item.id}`}
+        className="flex items-center gap-4">
         <img
           src={item.image}
           alt={item.heading}
@@ -14,7 +17,7 @@ const CartCard = ({ item, onRemove }) => {
           <p className="text-sm text-gray-600">{item.desc}</p>
           <p className="mt-1 font-semibold text-sky-600">Price: ₹{item.price}</p>
         </div>
-      </div>
+      </Link>
 
       <button
         onClick={onRemove}
