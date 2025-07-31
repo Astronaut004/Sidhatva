@@ -1,12 +1,30 @@
-# React + Vite
+# Sidhatva - E-commerce Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is the client-side application for Sidhatva, a modern e-commerce platform built with React.
 
-Currently, two official plugins are available:
+## Goal
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The primary goal of this project is to provide a seamless and user-friendly shopping experience. It aims to be a feature-rich e-commerce website where users can browse products, add them to their cart and wishlist, and make purchases.
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+*   **Product Catalog:** Browse products from various categories like Electronics, Furniture, and Home Decor.
+*   **Product Details:** View detailed information about each product.
+*   **Shopping Cart:** Add and remove products from the cart.
+*   **Wishlist:** Save products for later.
+*   **User Authentication:** Secure login and registration functionality.
+*   **Responsive Design:** The application is designed to work on various devices, including desktops, tablets, and mobile phones.
+
+## Tech Stack
+
+*   **Frontend:** React, React Router DOM
+*   **Styling:** Tailwind CSS
+*   **Build Tool:** Vite
+*   **Linting:** ESLint
+
+## Getting Started
+
+1.  Clone the repository.
+2.  Install dependencies: `npm install`
+3.  Start the development server: `npm run dev`
+4.  Open your browser and navigate to `http://localhost:5173` (or the port specified by Vite).
