@@ -1,6 +1,6 @@
 import pool from "../models/db.js";
 import bcrypt from "bcryptjs";
-import generateToken from "../utils/generateToken.js";
+import { generateToken } from "../utils/generateToken.js";
 
 export const register = async (req, res) => {
   const { name, email, password } = req.body;

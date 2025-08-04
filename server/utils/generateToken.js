@@ -1,8 +1,9 @@
 // utils/generateToken.js
 
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
-const generateToken = (payload) => {
+export const generateToken = async (payload) => {
   return jwt.sign(
     payload, 
     process.env.JWT_SECRET,
@@ -12,4 +13,4 @@ const generateToken = (payload) => {
   );
 };
 
-module.exports = generateToken;
+
