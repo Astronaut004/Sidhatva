@@ -3,7 +3,7 @@
 // const jwt = require('jsonwebtoken');
 import jwt from 'jsonwebtoken';
 
-export const generateToken = async (payload) => {
+export const generateToken = (payload) => {
   return jwt.sign(
     payload, 
     process.env.JWT_SECRET,
