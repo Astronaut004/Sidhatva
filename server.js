@@ -6,6 +6,8 @@ import authRoute from './routes/authRoute.js';
 import productRoute from './routes/productRoute.js';
 import orderRoutes from './routes/orderRoutes.js';
 import orderItemRoutes from './routes/orderItemRoutes.js';
+import cartRoutes from "./routes/cartRoutes.js";
+
 
 dotenv.config();
 
@@ -20,6 +22,7 @@ app.use('/api/auth', authRoute);
 app.use('/api/products',productRoute);
 app.use('/api/orders', orderRoutes);
 app.use('/api/order-items', orderItemRoutes);
+app.use("/api/cart", cartRoutes);
 
 
 
