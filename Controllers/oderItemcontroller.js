@@ -1,7 +1,5 @@
-// controllers/orderItemController.js
-const pool = require('../config/db');
+import pool from "../models/db.js";
 
-// Add item to an order
 exports.addOrderItem = async (req, res) => {
   const { order_id, product_id, quantity, price } = req.body;
   
@@ -12,8 +10,6 @@ exports.addOrderItem = async (req, res) => {
       message: 'All fields (order_id, product_id, quantity, price) are required'
     });
   }
-
-  // Validate quantity
   if (quantity <= 0) {
     return res.status(400).json({
       success: false,
@@ -22,7 +18,6 @@ exports.addOrderItem = async (req, res) => {
   }
 
   try {
-    // Check if order exists
     const orderCheck = await pool.query(
       'SELECT id FROM orders WHERE id = $1',
       [order_id]
@@ -34,8 +29,6 @@ exports.addOrderItem = async (req, res) => {
         message: `Order with ID ${order_id} not found`
       });
     }
-
-    // Check if product exists
     const productCheck = await pool.query(
       'SELECT id FROM products WHERE id = $1',
       [product_id]
@@ -47,8 +40,6 @@ exports.addOrderItem = async (req, res) => {
         message: `Product with ID ${product_id} not found`
       });
     }
-
-    // Insert order item
     const result = await pool.query(
       `INSERT INTO order_items (
         order_id, 
@@ -74,7 +65,6 @@ exports.addOrderItem = async (req, res) => {
   }
 };
 
-// Get items for an order
 exports.getOrderItems = async (req, res) => {
   const orderId = parseInt(req.params.orderId);
 
@@ -91,8 +81,6 @@ exports.getOrderItems = async (req, res) => {
         message: `Order with ID ${orderId} not found`
       });
     }
-
-    // Get all items for order
     const result = await pool.query(
       `SELECT 
         oi.id, 
@@ -122,12 +110,9 @@ exports.getOrderItems = async (req, res) => {
   }
 };
 
-// Update order item quantity
 exports.updateOrderItem = async (req, res) => {
   const itemId = parseInt(req.params.id);
   const { quantity } = req.body;
-
-  // Validate input
   if (!quantity) {
     return res.status(400).json({
       success: false,
@@ -143,7 +128,6 @@ exports.updateOrderItem = async (req, res) => {
   }
 
   try {
-    // Check if item exists
     const itemCheck = await pool.query(
       `SELECT 
         oi.id, 
@@ -160,8 +144,6 @@ exports.updateOrderItem = async (req, res) => {
         message: `Order item with ID ${itemId} not found`
       });
     }
-
-    // Prevent modification of completed/cancelled orders
     const orderStatus = itemCheck.rows[0].order_status;
     if (['Shipped', 'Delivered', 'Cancelled'].includes(orderStatus)) {
       return res.status(400).json({
@@ -169,8 +151,6 @@ exports.updateOrderItem = async (req, res) => {
         message: `Cannot modify items in ${orderStatus} orders`
       });
     }
-
-    // Update quantity (price is snapshot so not updated)
     const result = await pool.query(
       `UPDATE order_items 
        SET quantity = $1 
@@ -194,12 +174,10 @@ exports.updateOrderItem = async (req, res) => {
   }
 };
 
-// Remove item from order
 exports.removeOrderItem = async (req, res) => {
   const itemId = parseInt(req.params.id);
 
   try {
-    // Check if item exists
     const itemCheck = await pool.query(
       `SELECT 
         oi.id, 
@@ -216,8 +194,6 @@ exports.removeOrderItem = async (req, res) => {
         message: `Order item with ID ${itemId} not found`
       });
     }
-
-    // Prevent removal from completed/cancelled orders
     const orderStatus = itemCheck.rows[0].order_status;
     if (['Shipped', 'Delivered', 'Cancelled'].includes(orderStatus)) {
       return res.status(400).json({
@@ -226,7 +202,6 @@ exports.removeOrderItem = async (req, res) => {
       });
     }
 
-    // Delete item
     const result = await pool.query(
       `DELETE FROM order_items 
        WHERE id = $1 
@@ -249,7 +224,6 @@ exports.removeOrderItem = async (req, res) => {
   }
 };
 
-// Get order item by ID
 exports.getOrderItemById = async (req, res) => {
   const itemId = parseInt(req.params.id);
 

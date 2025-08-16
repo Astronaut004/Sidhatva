@@ -1,12 +1,6 @@
-// controllers/orderController.js
 import pool from "../models/db.js";
-
-// Create a new order
 exports.createOrder = async (req, res) => {
-  // Destructure required fields from request body
   const { user_id, total_amount, payment_method, delivery_address } = req.body;
-
-  // Validate required fields
   if (!user_id || !total_amount) {
     return res.status(400).json({ 
       success: false, 
@@ -15,7 +9,6 @@ exports.createOrder = async (req, res) => {
   }
 
   try {
-    // Insert new order into database
     const result = await pool.query(
       `INSERT INTO orders (
         user_id, 
@@ -26,8 +19,6 @@ exports.createOrder = async (req, res) => {
       RETURNING *`,
       [user_id, total_amount, payment_method, delivery_address]
     );
-
-    // Return 201 Created with new order data
     res.status(201).json({ 
       success: true, 
       order: result.rows[0] 
@@ -37,20 +28,17 @@ exports.createOrder = async (req, res) => {
     res.status(500).json({ 
       success: false, 
       message: 'Error creating order',
-      error: error.message // Send actual error message for debugging
+      error: error.message 
     });
   }
 };
 
-// Get orders with filters
 exports.getOrders = async (req, res) => {
-  // Extract possible query parameters
   const { user_id, status, payment_status } = req.query;
   const queryParams = [];
   let query = `SELECT * FROM orders WHERE 1 = 1`;
   
   try {
-    // Build dynamic query based on provided filters
     if (user_id) {
       query += ` AND user_id = $${queryParams.length + 1}`;
       queryParams.push(user_id);
@@ -84,8 +72,6 @@ exports.getOrders = async (req, res) => {
     });
   }
 };
-
-// Get single order by ID
 exports.getOrderById = async (req, res) => {
   const orderId = parseInt(req.params.id);
 
@@ -115,8 +101,6 @@ exports.getOrderById = async (req, res) => {
     });
   }
 };
-
-// Update order details
 exports.updateOrder = async (req, res) => {
   const orderId = parseInt(req.params.id);
   const { 
@@ -126,7 +110,6 @@ exports.updateOrder = async (req, res) => {
     delivery_address
   } = req.body;
 
-  // Validate at least one field is provided
   if (!status && !payment_status && !payment_method && !delivery_address) {
     return res.status(400).json({ 
       success: false, 
@@ -135,7 +118,6 @@ exports.updateOrder = async (req, res) => {
   }
 
   try {
-    // Build dynamic update query
     const updates = [];
     const values = [];
     
@@ -192,12 +174,10 @@ exports.updateOrder = async (req, res) => {
   }
 };
 
-// Cancel/delete order
 exports.cancelOrder = async (req, res) => {
   const orderId = parseInt(req.params.id);
 
   try {
-    // First check if order exists
     const checkOrder = await pool.query(
       `SELECT id FROM orders WHERE id = $1`,
       [orderId]
@@ -209,8 +189,6 @@ exports.cancelOrder = async (req, res) => {
         message: `Order with ID ${orderId} not found` 
       });
     }
-
-    // Soft delete (update status) instead of physical delete
     const result = await pool.query(
       `UPDATE orders 
        SET status = 'Cancelled'
