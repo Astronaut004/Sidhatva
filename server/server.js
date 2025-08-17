@@ -4,6 +4,11 @@ import pool from "./models/db.js";
 import cors from "cors";
 import authRoute from './routes/authRoute.js';
 import productRoute from './routes/productRoute.js';
+import orderRoutes from './routes/orderRoutes.js';
+import orderItemRoutes from './routes/orderItemRoutes.js';
+import cartRoutes from "./routes/cartRoutes.js";
+
+
 dotenv.config();
 
 const app = express();
@@ -15,6 +20,10 @@ app.use(express.json());
 
 app.use('/api/auth', authRoute);
 app.use('/api/products',productRoute);
+app.use('/api/orders', orderRoutes);
+app.use('/api/order-items', orderItemRoutes);
+app.use("/api/cart", cartRoutes);
+
 
 
 
