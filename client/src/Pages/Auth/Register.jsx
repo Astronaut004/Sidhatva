@@ -6,21 +6,9 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [alert, setAlert] = useState({ show: false, type: '', message: '' });
-
-    // Auto-hide alert after 3 seconds
-    // useEffect(() => {
-    //     if (alert.show) {
-    //         const timer = setTimeout(() => {
-    //             setAlert({ show: false, type: '', message: '' });
-    //         }, 3000);
-    //         return () => clearTimeout(timer);
-    //     }
-    // }, [alert.show]);
-
     const showAlert = (type, message) => {
         setAlert({ show: true, type, message });
     };
-
     const validateEmail = (email) => {
         // Basic email regex pattern
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -89,7 +77,8 @@ const Register = () => {
         };
 
         try {
-            const res = await fetch('http://localhost:5001/api/auth/register', {
+            console.log(`your api is here:  ${import.meta.env.VITE_BACKEND_API}/api/auth/register`);
+            const res = await fetch(`${import.meta.env.VITE_BACKEND_API}/api/auth/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
