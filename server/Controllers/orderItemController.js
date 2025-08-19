@@ -2,10 +2,9 @@
 
 import pool from "../models/db.js";
 
-exports.addOrderItem = async (req, res) => {
+export const addOrderItem = async (req, res) => {
   const { order_id, product_id, quantity, price } = req.body;
   
-  // Validate required fields
   if (!order_id || !product_id || !quantity || !price) {
     return res.status(400).json({
       success: false,
@@ -24,32 +23,28 @@ exports.addOrderItem = async (req, res) => {
       'SELECT id FROM orders WHERE id = $1',
       [order_id]
     );
-    
     if (orderCheck.rows.length === 0) {
       return res.status(404).json({
         success: false,
         message: `Order with ID ${order_id} not found`
       });
     }
+
     const productCheck = await pool.query(
       'SELECT id FROM products WHERE id = $1',
       [product_id]
     );
-    
     if (productCheck.rows.length === 0) {
       return res.status(404).json({
         success: false,
         message: `Product with ID ${product_id} not found`
       });
     }
+
     const result = await pool.query(
-      `INSERT INTO order_items (
-        order_id, 
-        product_id, 
-        quantity, 
-        price
-      ) VALUES ($1, $2, $3, $4) 
-      RETURNING *`,
+      `INSERT INTO order_items (order_id, product_id, quantity, price) 
+       VALUES ($1, $2, $3, $4) 
+       RETURNING *`,
       [order_id, product_id, quantity, price]
     );
 
@@ -67,22 +62,21 @@ exports.addOrderItem = async (req, res) => {
   }
 };
 
-exports.getOrderItems = async (req, res) => {
+export const getOrderItems = async (req, res) => {
   const orderId = parseInt(req.params.orderId);
 
   try {
-    // Check if order exists
     const orderCheck = await pool.query(
       'SELECT id FROM orders WHERE id = $1',
       [orderId]
     );
-    
     if (orderCheck.rows.length === 0) {
       return res.status(404).json({
         success: false,
         message: `Order with ID ${orderId} not found`
       });
     }
+
     const result = await pool.query(
       `SELECT 
         oi.id, 
@@ -112,16 +106,16 @@ exports.getOrderItems = async (req, res) => {
   }
 };
 
-exports.updateOrderItem = async (req, res) => {
+export const updateOrderItem = async (req, res) => {
   const itemId = parseInt(req.params.id);
   const { quantity } = req.body;
+
   if (!quantity) {
     return res.status(400).json({
       success: false,
       message: 'Quantity is required'
     });
   }
-
   if (quantity <= 0) {
     return res.status(400).json({
       success: false,
@@ -131,21 +125,19 @@ exports.updateOrderItem = async (req, res) => {
 
   try {
     const itemCheck = await pool.query(
-      `SELECT 
-        oi.id, 
-        o.status AS order_status
-      FROM order_items oi
-      JOIN orders o ON oi.order_id = o.id
-      WHERE oi.id = $1`,
+      `SELECT oi.id, o.status AS order_status
+       FROM order_items oi
+       JOIN orders o ON oi.order_id = o.id
+       WHERE oi.id = $1`,
       [itemId]
     );
-    
     if (itemCheck.rows.length === 0) {
       return res.status(404).json({
         success: false,
         message: `Order item with ID ${itemId} not found`
       });
     }
+
     const orderStatus = itemCheck.rows[0].order_status;
     if (['Shipped', 'Delivered', 'Cancelled'].includes(orderStatus)) {
       return res.status(400).json({
@@ -153,6 +145,7 @@ exports.updateOrderItem = async (req, res) => {
         message: `Cannot modify items in ${orderStatus} orders`
       });
     }
+
     const result = await pool.query(
       `UPDATE order_items 
        SET quantity = $1 
@@ -176,26 +169,24 @@ exports.updateOrderItem = async (req, res) => {
   }
 };
 
-exports.removeOrderItem = async (req, res) => {
+export const removeOrderItem = async (req, res) => {
   const itemId = parseInt(req.params.id);
 
   try {
     const itemCheck = await pool.query(
-      `SELECT 
-        oi.id, 
-        o.status AS order_status
-      FROM order_items oi
-      JOIN orders o ON oi.order_id = o.id
-      WHERE oi.id = $1`,
+      `SELECT oi.id, o.status AS order_status
+       FROM order_items oi
+       JOIN orders o ON oi.order_id = o.id
+       WHERE oi.id = $1`,
       [itemId]
     );
-    
     if (itemCheck.rows.length === 0) {
       return res.status(404).json({
         success: false,
         message: `Order item with ID ${itemId} not found`
       });
     }
+
     const orderStatus = itemCheck.rows[0].order_status;
     if (['Shipped', 'Delivered', 'Cancelled'].includes(orderStatus)) {
       return res.status(400).json({
@@ -226,7 +217,7 @@ exports.removeOrderItem = async (req, res) => {
   }
 };
 
-exports.getOrderItemById = async (req, res) => {
+export const getOrderItemById = async (req, res) => {
   const itemId = parseInt(req.params.id);
 
   try {
