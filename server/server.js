@@ -6,9 +6,9 @@ import pool from "./models/db.js";
 import cors from "cors";
 import authRoute from './routes/authRoute.js';
 import productRoute from './routes/productRoute.js';
-import orderRoutes from './routes/orderRoutes.js';
-import orderItemRoutes from './routes/orderItemRoutes.js';
-import cartRoutes from "./routes/cartRoutes.js";
+import orderRoute from './routes/orderRoute.js';
+import orderItemRoute from './routes/orderItemRoute.js';
+import cartRoute from "./routes/cartRoute.js";
 
 
 dotenv.config();
@@ -22,9 +22,9 @@ app.use(express.json());
 
 app.use('/api/auth', authRoute);
 app.use('/api/products',productRoute);
-app.use('/api/orders', orderRoutes);
-app.use('/api/order-items', orderItemRoutes);
-app.use("/api/cart", cartRoutes);
+app.use('/api/orders', orderRoute);
+app.use('/api/order-items', orderItemRoute);
+app.use("/api/cart", cartRoute);
 
 
 

@@ -1,4 +1,5 @@
 import pool from "../models/db.js";
+
 export const addCartItem = async (req, res) => {
   const { user_id, product_id, quantity } = req.body;
 
@@ -32,6 +33,7 @@ export const addCartItem = async (req, res) => {
     res.status(500).json({ success: false, message: "Error adding cart item" });
   }
 };
+
 export const getCartItems = async (req, res) => {
   const { userId } = req.params;
   try {
@@ -48,7 +50,6 @@ export const getCartItems = async (req, res) => {
     res.status(500).json({ success: false, message: "Error fetching cart items" });
   }
 };
-
 
 export const updateCartItem = async (req, res) => {
   const { id } = req.params;
@@ -74,7 +75,6 @@ export const updateCartItem = async (req, res) => {
     res.status(500).json({ success: false, message: "Error updating cart item" });
   }
 };
-
 
 export const removeCartItem = async (req, res) => {
   const { id } = req.params;

@@ -1,7 +1,8 @@
 // temporary test change
 
 import pool from "../models/db.js";
-exports.createOrder = async (req, res) => {
+
+export const createOrder = async (req, res) => {
   const { user_id, total_amount, payment_method, delivery_address } = req.body;
   if (!user_id || !total_amount) {
     return res.status(400).json({ 
@@ -35,7 +36,7 @@ exports.createOrder = async (req, res) => {
   }
 };
 
-exports.getOrders = async (req, res) => {
+export const getOrders = async (req, res) => {
   const { user_id, status, payment_status } = req.query;
   const queryParams = [];
   let query = `SELECT * FROM orders WHERE 1 = 1`;
@@ -74,7 +75,8 @@ exports.getOrders = async (req, res) => {
     });
   }
 };
-exports.getOrderById = async (req, res) => {
+
+export const getOrderById = async (req, res) => {
   const orderId = parseInt(req.params.id);
 
   try {
@@ -103,7 +105,8 @@ exports.getOrderById = async (req, res) => {
     });
   }
 };
-exports.updateOrder = async (req, res) => {
+
+export const updateOrder = async (req, res) => {
   const orderId = parseInt(req.params.id);
   const { 
     status, 
@@ -176,7 +179,7 @@ exports.updateOrder = async (req, res) => {
   }
 };
 
-exports.cancelOrder = async (req, res) => {
+export const cancelOrder = async (req, res) => {
   const orderId = parseInt(req.params.id);
 
   try {
