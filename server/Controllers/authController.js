@@ -4,24 +4,21 @@ import { generateToken } from "../utils/generateToken.js";
 
 // REGISTER USER
 export const register = async (req, res) => {
-  const { name, email, password, created_by } = req.body;
+  const { email, phone, password, role } = req.body;
   const salt = 12;
-
-  // Default role to 'user' if not provided
-  const role = created_by?.trim().toLowerCase() || "user";
 
   try {
     const hashPassword = await bcrypt.hash(password, salt);
 
     const result = await pool.query(
-      `INSERT INTO users (name, email, password, created_by) 
+      `INSERT INTO users (email, phone, password, role) 
        VALUES ($1, $2, $3, $4) 
-       RETURNING id, name, email, created_by`,
-      [name, email, hashPassword, role]
+       RETURNING id, email, phone, role`,
+      [email, phone, hashPassword, role]
     );
 
     const user = result.rows[0];
-    const token = generateToken({ id: user.id, name: user.name, role: user.created_by });
+    const token = generateToken({ id: user.id, email: user.email, role: user.role });
 
     res.status(201).json({ user, token });
   } catch (err) {
@@ -43,14 +40,14 @@ export const login = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(401).json({ message: "Wrong credentials" });
 
-    const token = generateToken({ id: user.id, name: user.name, role: user.created_by });
+    const token = generateToken({ id: user.id, email: user.email, role: user.role });
 
     res.status(200).json({
       user: {
         id: user.id,
-        name: user.name,
         email: user.email,
-        created_by: user.created_by
+        phone: user.phone,
+        role: user.role
       },
       token
     });
