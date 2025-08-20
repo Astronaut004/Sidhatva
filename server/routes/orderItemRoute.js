@@ -1,17 +1,20 @@
 import express from "express";
 import {
+    authenticate,
   addOrderItem,
   getOrderItems,
-  getOrderItemById,
   updateOrderItem,
   removeOrderItem,
+  getOrderItemById
 } from "../Controllers/orderItemController.js";
 
 const router = express.Router();
-router.post("/", addOrderItem);
-router.get("/order/:orderId", getOrderItems);
-router.get("/:id", getOrderItemById);
-router.put("/:id", updateOrderItem);
-router.delete("/:id", removeOrderItem);
+
+// Apply auth middleware to all routes
+router.post("/", authenticate, addOrderItem);
+router.get("/:orderId", authenticate, getOrderItems);
+router.get("/item/:id", authenticate, getOrderItemById);
+router.put("/:id", authenticate, updateOrderItem);
+router.delete("/:id", authenticate, removeOrderItem);
 
 export default router;
