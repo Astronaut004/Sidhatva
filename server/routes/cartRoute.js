@@ -1,22 +1,15 @@
-// temporary test change
-
 import express from "express";
-import { 
-  addCartItem, 
-  getCartItems, 
-  updateCartItem, 
-  removeCartItem, 
-  clearCart 
-} from "../Controllers/cartController.js";
+import { authenticate, addCartItem, getCartItems, updateCartItem, removeCartItem, clearCart } from "../Controllers/cartController.js";
 
 const router = express.Router();
 
-router.post("/", addCartItem);
-router.get("/:userId", getCartItems);
-router.put("/:id", updateCartItem);
-router.delete("/:id", removeCartItem);
-router.delete("/user/:userId", clearCart);
+router.post("/", authenticate, addCartItem);
+router.get("/", authenticate, getCartItems);
+router.put("/:id", authenticate, updateCartItem);
+router.delete("/:id", authenticate, removeCartItem);
+router.delete("/", authenticate, clearCart);
 
 export default router;
+
 
 
