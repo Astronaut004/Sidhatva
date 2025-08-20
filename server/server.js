@@ -10,6 +10,7 @@ import orderRoute from './routes/orderRoute.js';
 import orderItemRoute from './routes/orderItemRoute.js';
 import cartRoute from "./routes/cartRoute.js";
 import productCategoryRoute from './routes/productCategoryRoute.js';
+import subCategoryRoute from './routes/subCategoryRoute.js';
 
 dotenv.config();
 
@@ -25,7 +26,10 @@ app.use('/api/products',productRoute);
 app.use('/api/orders', orderRoute);
 app.use('/api/order-items', orderItemRoute);
 app.use("/api/cart", cartRoute);
-app.use('/api/category',productCategoryRoute);
+
+
+
+app.use('/api/sub-category',subCategoryRoute);
 
 
 
