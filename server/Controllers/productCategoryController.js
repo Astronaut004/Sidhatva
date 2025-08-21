@@ -1,4 +1,5 @@
 import pool from "../models/db.js";
+import slugify from "slugify";
 
 /**
  * Product Category Controller
@@ -29,7 +30,7 @@ const getAllCategories = async (req, res) => {
 // POST /categories - Create a new category (admin)
 const createCategory = async (req, res) => {
   try {
-    const { name } = req.body;
+    const { name, description, created_by } = req.body;
     // Validation
     if (!name || typeof name !== 'string' || name.trim().length === 0) {
       return res.status(400).json({
@@ -45,9 +46,11 @@ const createCategory = async (req, res) => {
       });
     }
     const trimmedName = name.trim();
+    const slug = slugify(trimmedName, { lower: true, strict: true });
+
     // Insert new category
-    const query = 'INSERT INTO product_categories (name) VALUES ($1) RETURNING id, name';
-    const result = await pool.query(query, [trimmedName]);
+    const query = 'INSERT INTO product_categories (name, slug, description, created_by) VALUES ($1, $2, $3, $4) RETURNING *';
+    const result = await pool.query(query, [trimmedName, slug, description, created_by]);
 
     res.status(201).json({
       success: true,
@@ -61,7 +64,7 @@ const createCategory = async (req, res) => {
     if (error.code === '23505') {
       return res.status(409).json({
         success: false,
-        message: 'Category name already exists'
+        message: 'Category name or slug already exists'
       });
     }
 
@@ -77,7 +80,7 @@ const createCategory = async (req, res) => {
 const updateCategory = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name } = req.body;
+    const { name, description } = req.body;
 
     // Validate ID
     if (!id || isNaN(parseInt(id))) {
@@ -103,10 +106,12 @@ const updateCategory = async (req, res) => {
     }
 
     const trimmedName = name.trim();
+    const slug = slugify(trimmedName, { lower: true, strict: true });
+
 
     // Update category
-    const query = 'UPDATE product_categories SET name = $1 WHERE id = $2 RETURNING id, name';
-    const result = await pool.query(query, [trimmedName, parseInt(id)]);
+    const query = 'UPDATE product_categories SET name = $1, slug = $2, description = $3, updated_at = CURRENT_TIMESTAMP WHERE id = $4 RETURNING *';
+    const result = await pool.query(query, [trimmedName, slug, description, parseInt(id)]);
 
     if (result.rows.length === 0) {
       return res.status(404).json({
@@ -127,7 +132,7 @@ const updateCategory = async (req, res) => {
     if (error.code === '23505') {
       return res.status(409).json({
         success: false,
-        message: 'Category name already exists'
+        message: 'Category name or slug already exists'
       });
     }
 
@@ -153,7 +158,7 @@ const deleteCategory = async (req, res) => {
     }
 
     // Check if category exists and get its data before deletion
-    const checkQuery = 'SELECT id, name FROM product_categories WHERE id = $1';
+    const checkQuery = 'SELECT * FROM product_categories WHERE id = $1';
     const checkResult = await pool.query(checkQuery, [parseInt(id)]);
 
     if (checkResult.rows.length === 0) {
@@ -204,7 +209,7 @@ const getCategoryById = async (req, res) => {
       });
     }
 
-    const query = 'SELECT id, name FROM product_categories WHERE id = $1';
+    const query = 'SELECT * FROM product_categories WHERE id = $1';
     const result = await pool.query(query, [parseInt(id)]);
 
     if (result.rows.length === 0) {
