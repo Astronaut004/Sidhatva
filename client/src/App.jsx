@@ -19,6 +19,7 @@ const Login = lazy(() => import('./Pages/Auth/Login'));
 const Cart = lazy(() => import('./Pages/Cart'));
 const Wishlist = lazy(() => import('./Pages/Wishlist'));
 const ItemDetail = lazy(() => import('./Pages/ItemDetail'));
+const Admin = lazy(() => import('./adminPanel/AdminHome'));
 
 const App = () => {
   return (
@@ -38,6 +39,7 @@ const App = () => {
           <Route path='/cart' element={<Cart />} />
           <Route path='/wishlist' element={<Wishlist/>} />
           <Route path='/item-detail/:id' element={<ItemDetail/>} />
+          <Route path='/admin' element={<Admin/>} />
           <Route path="*" element={<div>404 Page Not Found</div>} />
         </Routes>
         <Footer/>
