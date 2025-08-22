@@ -26,8 +26,7 @@ app.use('/api/products',productRoute);
 app.use('/api/orders', orderRoute);
 app.use('/api/order-items', orderItemRoute);
 app.use("/api/cart", cartRoute);
-
-
+app.use("/api/category", productCategoryRoute);
 
 app.use('/api/sub-category',subCategoryRoute);
 
