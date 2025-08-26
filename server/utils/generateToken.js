@@ -1,16 +1,11 @@
-// utils/generateToken.js
+const jwt = require('jsonwebtoken');
+const config = require('../config'); // We'll use the centralized config for our secret key
 
-// const jwt = require('jsonwebtoken');
-import jwt from 'jsonwebtoken';
-
-export const generateToken = (payload) => {
-  return jwt.sign(
-    payload, 
-    process.env.JWT_SECRET,
-    {
-      expiresIn: '7d', // Token expires in 7 days
-    }
-  );
+const generateToken = (payload) => {
+  // The payload typically contains non-sensitive user info like id and role
+  return jwt.sign(payload, config.jwt.secret, {
+    expiresIn: config.jwt.expiresIn,
+  });
 };
 
-
+module.exports = generateToken;
