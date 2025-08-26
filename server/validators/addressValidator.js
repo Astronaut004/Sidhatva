@@ -1,7 +1,8 @@
-const { body } = require('express-validator');
-const { handleValidationErrors } = require('../middleware/validationMiddleware');
+// addressValidator.js
+import { body } from 'express-validator';
+import { handleValidationErrors } from '../middleware/validationMiddleware.js';
 
-exports.addressValidator = [
+export const addressValidator = [
   body('recipient_name')
     .trim()
     .notEmpty().withMessage('Recipient name is required.'),

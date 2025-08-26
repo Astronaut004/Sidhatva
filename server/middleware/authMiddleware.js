@@ -1,9 +1,11 @@
-const jwt = require('jsonwebtoken');
-const asyncHandler = require('../utils/asyncHandler');
-const { User } = require('../models');
-const config = require('../config');
+// --- File: middleware/authMiddleware.js ---
 
-const protect = asyncHandler(async (req, res, next) => {
+import jwt from 'jsonwebtoken';
+import asyncHandler from '../utils/asyncHandler.js';
+import { User } from '../models/index.js';
+import config from '../config/index.js';
+
+export const protect = asyncHandler(async (req, res, next) => {
   let token;
 
   // Check for the token in the 'Authorization' header
@@ -38,5 +40,3 @@ const protect = asyncHandler(async (req, res, next) => {
     throw new Error('Not authorized, no token');
   }
 });
-
-module.exports = { protect };

@@ -1,4 +1,6 @@
-module.exports = (sequelize, DataTypes) => {
+// --- File: models/wishlistItem.js ---
+
+export const WishlistItemModel = (sequelize, DataTypes) => {
   const WishlistItem = sequelize.define('WishlistItem', {
     id: {
       type: DataTypes.BIGINT,
@@ -10,35 +12,35 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       references: {
         model: 'wishlists',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
     product_id: {
       type: DataTypes.BIGINT,
       allowNull: false,
       references: {
         model: 'products',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
     variant_id: {
       type: DataTypes.BIGINT,
       references: {
         model: 'product_variants',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
   }, {
     tableName: 'wishlist_items',
     timestamps: true,
-    createdAt: 'added_at', // Using 'added_at' as per your schema for creation
+    createdAt: 'added_at',
     updatedAt: 'updated_at',
     indexes: [
-        {
-            unique: true,
-            fields: ['wishlist_id', 'product_id', 'variant_id']
-        }
-    ]
+      {
+        unique: true,
+        fields: ['wishlist_id', 'product_id', 'variant_id'],
+      },
+    ],
   });
 
   WishlistItem.associate = (models) => {

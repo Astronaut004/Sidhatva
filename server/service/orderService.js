@@ -1,5 +1,5 @@
-const { Order, OrderItem, Cart, CartItem, Product, sequelize } = require('../models');
-const { v4: uuidv4 } = require('uuid'); // For generating unique order numbers
+import { Order, OrderItem, Cart, CartItem, Product, sequelize } from '../models';
+import { v4 as uuidv4 } from 'uuid'; // For generating unique order numbers
 
 /**
  * Creates an order from the user's cart.
@@ -7,7 +7,7 @@ const { v4: uuidv4 } = require('uuid'); // For generating unique order numbers
  * @param {object} orderData - Additional data for the order (e.g., paymentMethod, addressId).
  * @returns {Promise<object>} The newly created order.
  */
-exports.createOrderFromCart = async (userId, orderData) => {
+export const createOrderFromCart = async (userId, orderData) => {
   const { paymentMethod, shippingAddressId, billingAddressId } = orderData;
 
   // 1. Find the user's active cart
@@ -16,8 +16,8 @@ exports.createOrderFromCart = async (userId, orderData) => {
     include: [{
       model: CartItem,
       as: 'items',
-      include: { model: Product, as: 'product' }
-    }]
+      include: { model: Product, as: 'product' },
+    }],
   });
 
   if (!cart || !cart.items || cart.items.length === 0) {
@@ -61,20 +61,19 @@ exports.createOrderFromCart = async (userId, orderData) => {
     // 5. Deactivate the cart so it can't be used again
     await cart.update({ is_active: false }, { transaction: t });
     
-    // (Optional) Here you would also reduce stock quantities for the purchased products.
+    // (Optional) Reduce stock quantities here if needed
 
-    // 6. If everything is successful, commit the transaction
+    // 6. Commit transaction
     await t.commit();
 
     // 7. Return the newly created order with its items
     return Order.findByPk(newOrder.id, {
-        include: { model: OrderItem, as: 'items' }
+      include: { model: OrderItem, as: 'items' },
     });
 
   } catch (error) {
-    // If any step fails, roll back all database changes
     await t.rollback();
-    throw error; // Re-throw the error to be handled by the global error handler
+    throw error;
   }
 };
 
@@ -83,10 +82,10 @@ exports.createOrderFromCart = async (userId, orderData) => {
  * @param {number} userId - The ID of the user.
  * @returns {Promise<Array>} A list of the user's orders.
  */
-exports.getUserOrders = async (userId) => {
-    return Order.findAll({
-        where: { user_id: userId },
-        order: [['created_at', 'DESC']],
-        include: { model: OrderItem, as: 'items' }
-    });
+export const getUserOrders = async (userId) => {
+  return Order.findAll({
+    where: { user_id: userId },
+    order: [['created_at', 'DESC']],
+    include: { model: OrderItem, as: 'items' },
+  });
 };

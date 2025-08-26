@@ -1,12 +1,12 @@
-const { validationResult } = require('express-validator');
+// --- File: middleware/validationMiddleware.js ---
 
-const handleValidationErrors = (req, res, next) => {
+import { validationResult } from 'express-validator';
+
+export const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    // If there are validation errors, return a 400 Bad Request response
+    // Return a 400 Bad Request if validation errors exist
     return res.status(400).json({ errors: errors.array() });
   }
-  next(); // No errors, proceed to the next middleware or controller
+  next(); // No errors, proceed
 };
-
-module.exports = { handleValidationErrors };

@@ -1,6 +1,8 @@
-const slugify = require('slugify'); // <-- THIS IS THE FIX
+// --- File: models/product.js ---
 
-module.exports = (sequelize, DataTypes) => {
+import slugify from 'slugify';
+
+export const ProductModel = (sequelize, DataTypes) => {
   const Product = sequelize.define('Product', {
     id: { type: DataTypes.BIGINT, primaryKey: true, autoIncrement: true },
     sku: { type: DataTypes.STRING(100), unique: true, allowNull: false },
@@ -36,7 +38,6 @@ module.exports = (sequelize, DataTypes) => {
     hooks: {
       beforeValidate: (product) => {
         if (product.name && !product.slug) {
-          // This line will now work correctly
           product.slug = slugify(product.name, { lower: true, strict: true });
         }
       }

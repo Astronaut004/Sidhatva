@@ -1,5 +1,5 @@
-const { Product, ProductCategory, Brand } = require('../models');
-const { Op } = require('sequelize');
+import { Product, ProductCategory, Brand } from '../models';
+import { Op } from 'sequelize';
 
 /**
  * Creates a new product in the database.
@@ -7,7 +7,7 @@ const { Op } = require('sequelize');
  * @param {number} userId - The ID of the user creating the product.
  * @returns {Promise<object>} The created product object.
  */
-exports.createProduct = async (productData, userId) => {
+export const createProduct = async (productData, userId) => {
   // You can add more complex logic here, like checking if the SKU already exists.
   const newProduct = await Product.create({
     ...productData,
@@ -21,7 +21,7 @@ exports.createProduct = async (productData, userId) => {
  * @param {object} queryOptions - Options for filtering, sorting, etc.
  * @returns {Promise<Array>} An array of product objects.
  */
-exports.getAllProducts = async (queryOptions = {}) => {
+export const getAllProducts = async (queryOptions = {}) => {
   // We'll build a query based on the options provided.
   const query = {
     where: {
@@ -46,14 +46,14 @@ exports.getAllProducts = async (queryOptions = {}) => {
  * @param {string} slug - The slug of the product to find.
  * @returns {Promise<object|null>} The product object or null if not found.
  */
-exports.getProductBySlug = async (slug) => {
+export const getProductBySlug = async (slug) => {
   const product = await Product.findOne({
-    where: { slug: slug, is_active: true },
+    where: { slug, is_active: true },
     include: [
-        { model: ProductCategory, as: 'category' },
-        { model: Brand, as: 'brand' },
-        // We can add includes for variants and images here later
-    ]
+      { model: ProductCategory, as: 'category' },
+      { model: Brand, as: 'brand' },
+      // We can add includes for variants and images here later
+    ],
   });
 
   if (!product) {

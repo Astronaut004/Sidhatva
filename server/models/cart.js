@@ -1,14 +1,12 @@
-// --- File: models/cart.js ---
-module.exports = (sequelize, DataTypes) => {
+export default (sequelize, DataTypes) => {
   const Cart = sequelize.define('Cart', {
-    // ... (all the fields for the cart table)
     id: {
       type: DataTypes.BIGINT,
       primaryKey: true,
       autoIncrement: true,
     },
     user_id: DataTypes.BIGINT,
-    // ...etc
+    // Add other fields here as needed
   }, {
     tableName: 'carts',
     timestamps: true,

@@ -1,8 +1,8 @@
 // --- File: models/productCategory.js ---
 
-const slugify = require('slugify');
+import slugify from 'slugify';
 
-module.exports = (sequelize, DataTypes) => {
+export const ProductCategoryModel = (sequelize, DataTypes) => {
   const ProductCategory = sequelize.define('ProductCategory', {
     id: {
       type: DataTypes.BIGINT,
@@ -44,5 +44,3 @@ module.exports = (sequelize, DataTypes) => {
 
   return ProductCategory;
 };
-
-

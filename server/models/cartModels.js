@@ -1,6 +1,6 @@
-// --- File: models/cart.js ---
+// --- File: models/cartModels.js ---
 
-module.exports = (sequelize, DataTypes) => {
+export const CartModel = (sequelize, DataTypes) => {
   const Cart = sequelize.define('Cart', {
     id: {
       type: DataTypes.BIGINT,
@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BIGINT,
       references: {
         model: 'users',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
     session_id: { // For guest carts
       type: DataTypes.STRING(255),
@@ -49,9 +49,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Cart.associate = (models) => {
-    // A cart belongs to one user
     Cart.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' });
-    // A cart can have many items
     Cart.hasMany(models.CartItem, { foreignKey: 'cart_id', as: 'items' });
   };
 
@@ -59,9 +57,7 @@ module.exports = (sequelize, DataTypes) => {
 };
 
 
-// --- File: models/cartItem.js ---
-
-module.exports = (sequelize, DataTypes) => {
+export const CartItemModel = (sequelize, DataTypes) => {
   const CartItem = sequelize.define('CartItem', {
     id: {
       type: DataTypes.BIGINT,
@@ -73,23 +69,23 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       references: {
         model: 'carts',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
     product_id: {
       type: DataTypes.BIGINT,
       allowNull: false,
       references: {
         model: 'products',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
     variant_id: {
       type: DataTypes.BIGINT,
       references: {
         model: 'product_variants',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
     quantity: {
       type: DataTypes.INTEGER,
@@ -109,21 +105,18 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
-    // Ensure a product/variant combination is unique within a cart
     indexes: [
-        {
-            unique: true,
-            fields: ['cart_id', 'product_id', 'variant_id']
-        }
-    ]
+      {
+        unique: true,
+        fields: ['cart_id', 'product_id', 'variant_id'],
+      },
+    ],
   });
 
   CartItem.associate = (models) => {
-    // An item belongs to one cart
     CartItem.belongsTo(models.Cart, { foreignKey: 'cart_id', as: 'cart' });
-    // An item is linked to one product
     CartItem.belongsTo(models.Product, { foreignKey: 'product_id', as: 'product' });
-    // Add association for ProductVariant if you create that model
+    // Add association for ProductVariant if created
   };
 
   return CartItem;

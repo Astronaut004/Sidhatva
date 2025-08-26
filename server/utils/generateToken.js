@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken');
-const config = require('../config'); // We'll use the centralized config for our secret key
+import jwt from 'jsonwebtoken';
+import config from '../config.js'; // Make sure your config file also uses ES module export
 
 const generateToken = (payload) => {
   // The payload typically contains non-sensitive user info like id and role
@@ -8,4 +8,4 @@ const generateToken = (payload) => {
   });
 };
 
-module.exports = generateToken;
+export default generateToken;

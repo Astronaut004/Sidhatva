@@ -1,4 +1,6 @@
-module.exports = (sequelize, DataTypes) => {
+import slugify from 'slugify';
+
+export default (sequelize, DataTypes) => {
   const Brand = sequelize.define('Brand', {
     id: {
       type: DataTypes.BIGINT,

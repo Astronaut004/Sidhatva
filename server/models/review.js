@@ -1,4 +1,6 @@
-module.exports = (sequelize, DataTypes) => {
+// --- File: models/review.js ---
+
+export const ReviewModel = (sequelize, DataTypes) => {
   const Review = sequelize.define('Review', {
     id: {
       type: DataTypes.BIGINT,
@@ -10,24 +12,24 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       references: {
         model: 'products',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
     user_id: {
       type: DataTypes.BIGINT,
       allowNull: false,
       references: {
         model: 'users',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
     rating: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         min: 1,
-        max: 5
-      }
+        max: 5,
+      },
     },
     comment: {
       type: DataTypes.TEXT,
@@ -37,16 +39,16 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: true, // Auto-approve for now
     },
   }, {
-    tableName: 'reviews', // You'll need to create this table in your DB
+    tableName: 'reviews',
     timestamps: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
     indexes: [
-        {
-            unique: true,
-            fields: ['product_id', 'user_id'] // A user can only review a product once
-        }
-    ]
+      {
+        unique: true,
+        fields: ['product_id', 'user_id'], // A user can only review a product once
+      }
+    ],
   });
 
   Review.associate = (models) => {

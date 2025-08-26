@@ -1,7 +1,8 @@
-const { body } = require('express-validator');
-const { handleValidationErrors } = require('../middleware/validationMiddleware');
+// --- File: validators/reviewValidator.mjs ---
+import { body } from 'express-validator';
+import { handleValidationErrors } from '../middleware/validationMiddleware.mjs';
 
-exports.reviewValidator = [
+export const reviewValidator = [
   body('rating')
     .isInt({ min: 1, max: 5 })
     .withMessage('Rating must be an integer between 1 and 5.'),
@@ -9,15 +10,15 @@ exports.reviewValidator = [
   body('comment')
     .optional()
     .trim()
-    .isLength({ max: 1000 }).withMessage('Comment cannot exceed 1000 characters.'),
+    .isLength({ max: 1000 })
+    .withMessage('Comment cannot exceed 1000 characters.'),
 
   handleValidationErrors,
 ];
 
 
-// --- File: services/reviewService.js ---
-
-const { Review, Product, sequelize } = require('../models');
+// --- File: services/reviewService.mjs ---
+import { Review, Product, sequelize } from '../models/index.mjs';
 
 /**
  * Creates a new review for a product and updates the product's average rating.
@@ -26,11 +27,11 @@ const { Review, Product, sequelize } = require('../models');
  * @param {object} reviewData - The review data { rating, comment }.
  * @returns {Promise<object>} The newly created review.
  */
-exports.createReview = async (userId, productId, reviewData) => {
+export const createReview = async (userId, productId, reviewData) => {
   const { rating, comment } = reviewData;
 
   // In a real application, you should first verify that the user has purchased this product.
-  // We will skip that check for now.
+  // Skipping that check for now.
 
   const t = await sequelize.transaction();
   try {
@@ -42,7 +43,7 @@ exports.createReview = async (userId, productId, reviewData) => {
       comment,
     }, { transaction: t });
 
-    // After creating the review, recalculate the product's average rating
+    // Recalculate the product's average rating
     const stats = await Review.findAll({
       where: { product_id: productId },
       attributes: [
@@ -68,11 +69,10 @@ exports.createReview = async (userId, productId, reviewData) => {
 
   } catch (error) {
     await t.rollback();
-    // Handle unique constraint error (user already reviewed)
     if (error.name === 'SequelizeUniqueConstraintError') {
-        const customError = new Error('You have already reviewed this product.');
-        customError.statusCode = 409; // Conflict
-        throw customError;
+      const customError = new Error('You have already reviewed this product.');
+      customError.statusCode = 409;
+      throw customError;
     }
     throw error;
   }
@@ -83,17 +83,17 @@ exports.createReview = async (userId, productId, reviewData) => {
  * @param {number} productId - The ID of the product.
  * @returns {Promise<Array>} An array of reviews for the product.
  */
-exports.getProductReviews = async (productId) => {
-    return Review.findAll({
-        where: { product_id: productId, is_approved: true },
-        include: {
-            association: 'user',
-            attributes: ['id'], // Only include user ID and their profile's first name
-            include: {
-                association: 'profile',
-                attributes: ['first_name']
-            }
-        },
-        order: [['created_at', 'DESC']]
-    });
+export const getProductReviews = async (productId) => {
+  return Review.findAll({
+    where: { product_id: productId, is_approved: true },
+    include: {
+      association: 'user',
+      attributes: ['id'],
+      include: {
+        association: 'profile',
+        attributes: ['first_name']
+      }
+    },
+    order: [['created_at', 'DESC']]
+  });
 };

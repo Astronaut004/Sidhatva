@@ -1,4 +1,6 @@
-module.exports = (sequelize, DataTypes) => {
+// --- File: models/wishlist.js ---
+
+export const WishlistModel = (sequelize, DataTypes) => {
   const Wishlist = sequelize.define('Wishlist', {
     id: {
       type: DataTypes.BIGINT,
@@ -10,8 +12,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       references: {
         model: 'users',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
     name: {
       type: DataTypes.STRING(255),

@@ -1,4 +1,4 @@
-const { Cart, CartItem, Product, sequelize } = require('../models');
+import { Cart, CartItem, Product, sequelize } from '../models';
 
 /**
  * Finds or creates a cart for a given user.
@@ -8,7 +8,7 @@ const { Cart, CartItem, Product, sequelize } = require('../models');
 const findOrCreateCart = async (userId) => {
   const [cart] = await Cart.findOrCreate({
     where: { user_id: userId, is_active: true },
-    defaults: { user_id: userId }
+    defaults: { user_id: userId },
   });
   return cart;
 };
@@ -20,13 +20,16 @@ const findOrCreateCart = async (userId) => {
  */
 const recalculateCartTotals = async (cartId) => {
   const cart = await Cart.findByPk(cartId, {
-    include: [{ model: CartItem, as: 'items' }]
+    include: [{ model: CartItem, as: 'items' }],
   });
 
   if (!cart) return null;
 
-  const subtotal = cart.items.reduce((sum, item) => sum + parseFloat(item.total_price), 0);
-  
+  const subtotal = cart.items.reduce(
+    (sum, item) => sum + parseFloat(item.total_price),
+    0
+  );
+
   // In a real app, you would calculate tax and shipping here.
   const taxAmount = subtotal * 0.18; // Example: 18% tax
   const totalAmount = subtotal + taxAmount;
@@ -45,7 +48,7 @@ const recalculateCartTotals = async (cartId) => {
  * @param {number} userId - The ID of the logged-in user.
  * @returns {Promise<object>} The user's cart.
  */
-exports.getCart = async (userId) => {
+export const getCart = async (userId) => {
   const cart = await findOrCreateCart(userId);
 
   return Cart.findByPk(cart.id, {
@@ -55,10 +58,10 @@ exports.getCart = async (userId) => {
       include: {
         model: Product,
         as: 'product',
-        attributes: ['name', 'slug', 'selling_price']
-      }
+        attributes: ['name', 'slug', 'selling_price'],
+      },
     },
-    order: [[{ model: CartItem, as: 'items' }, 'created_at', 'DESC']]
+    order: [[{ model: CartItem, as: 'items' }, 'created_at', 'DESC']],
   });
 };
 
@@ -68,7 +71,7 @@ exports.getCart = async (userId) => {
  * @param {object} itemData - Data for the item to add { productId, quantity }.
  * @returns {Promise<object>} The updated cart.
  */
-exports.addItemToCart = async (userId, itemData) => {
+export const addItemToCart = async (userId, itemData) => {
   const { productId, quantity } = itemData;
 
   const product = await Product.findByPk(productId);
@@ -86,7 +89,7 @@ exports.addItemToCart = async (userId, itemData) => {
     const [cartItem, created] = await CartItem.findOrCreate({
       where: { cart_id: cart.id, product_id: productId },
       defaults: {
-        quantity: quantity,
+        quantity,
         unit_price: product.selling_price,
         total_price: quantity * product.selling_price,
       },
@@ -107,5 +110,5 @@ exports.addItemToCart = async (userId, itemData) => {
   }
 
   await recalculateCartTotals(cart.id);
-  return this.getCart(userId);
+  return getCart(userId); // Use the named export function directly
 };

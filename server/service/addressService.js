@@ -1,4 +1,4 @@
-const { Address, sequelize } = require('../models');
+import { Address, sequelize } from '../models';
 
 /**
  * Creates a new address for a user.
@@ -7,7 +7,7 @@ const { Address, sequelize } = require('../models');
  * @param {object} addressData - The data for the new address.
  * @returns {Promise<object>} The newly created address object.
  */
-exports.createAddress = async (userId, addressData) => {
+export const createAddress = async (userId, addressData) => {
   const { is_default } = addressData;
 
   // Use a transaction to ensure data integrity, especially when updating other records.
@@ -23,10 +23,10 @@ exports.createAddress = async (userId, addressData) => {
     }
 
     // Now, create the new address.
-    const newAddress = await Address.create({
-      ...addressData,
-      user_id: userId,
-    }, { transaction: t });
+    const newAddress = await Address.create(
+      { ...addressData, user_id: userId },
+      { transaction: t }
+    );
 
     // Commit the transaction if everything was successful.
     await t.commit();
@@ -44,10 +44,13 @@ exports.createAddress = async (userId, addressData) => {
  * @param {number} userId - The ID of the user.
  * @returns {Promise<Array>} An array of the user's addresses.
  */
-exports.getUserAddresses = async (userId) => {
+export const getUserAddresses = async (userId) => {
   const addresses = await Address.findAll({
     where: { user_id: userId, is_active: true },
-    order: [['is_default', 'DESC'], ['updated_at', 'DESC']], // Show default address first
+    order: [
+      ['is_default', 'DESC'],  // Show default address first
+      ['updated_at', 'DESC']
+    ],
   });
   return addresses;
 };

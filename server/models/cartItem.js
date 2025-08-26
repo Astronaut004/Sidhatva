@@ -1,7 +1,5 @@
-// --- File: models/cartItem.js ---
-module.exports = (sequelize, DataTypes) => {
+export default (sequelize, DataTypes) => {
   const CartItem = sequelize.define('CartItem', {
-    // ... (all the fields for the cart_items table)
     id: {
       type: DataTypes.BIGINT,
       primaryKey: true,
@@ -10,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     cart_id: DataTypes.BIGINT,
     product_id: DataTypes.BIGINT,
     quantity: DataTypes.INTEGER,
-    // ...etc
+    // Add other fields here as needed
   }, {
     tableName: 'cart_items',
     timestamps: true,

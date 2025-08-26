@@ -1,6 +1,6 @@
 // --- File: models/order.js ---
 
-module.exports = (sequelize, DataTypes) => {
+export const OrderModel = (sequelize, DataTypes) => {
   const Order = sequelize.define('Order', {
     id: {
       type: DataTypes.BIGINT,
@@ -52,11 +52,9 @@ module.exports = (sequelize, DataTypes) => {
   Order.associate = (models) => {
     Order.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' });
     Order.hasMany(models.OrderItem, { foreignKey: 'order_id', as: 'items' });
-    // You can also associate addresses here if you create an Address model
+    // Optional: associate addresses if Address model exists
     // Order.belongsTo(models.Address, { foreignKey: 'shipping_address_id', as: 'shippingAddress' });
   };
 
   return Order;
 };
-
-

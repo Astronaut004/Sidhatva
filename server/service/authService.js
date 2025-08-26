@@ -1,14 +1,11 @@
-// This file contains the core business logic for user authentication.
-// It interacts directly with the database models (User, Profile).
-
-const { User, Profile, sequelize } = require('../models');
+import { User, Profile, sequelize } from '../models';
 
 /**
  * Registers a new user and their profile in the database.
  * @param {object} userData - The user's registration data (email, password, firstName, etc.).
  * @returns {Promise<object>} The newly created user object with their profile.
  */
-exports.register = async (userData) => {
+export const register = async (userData) => {
   const { email, password, firstName, lastName, phone } = userData;
 
   // First, check if a user with this email already exists to prevent duplicates.
@@ -62,7 +59,7 @@ exports.register = async (userData) => {
  * @param {string} password - The user's password.
  * @returns {Promise<object>} The authenticated user object (without the password).
  */
-exports.login = async (email, password) => {
+export const login = async (email, password) => {
   // Find the user by their email address.
   const user = await User.findOne({ where: { email } });
 

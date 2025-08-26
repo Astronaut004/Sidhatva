@@ -1,4 +1,6 @@
-module.exports = (sequelize, DataTypes) => {
+// --- File: models/profile.js ---
+
+export const ProfileModel = (sequelize, DataTypes) => {
   const Profile = sequelize.define('Profile', {
     id: {
       type: DataTypes.BIGINT,
@@ -10,9 +12,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BIGINT,
       allowNull: false,
       references: {
-        model: 'users', // This should match the table name for the User model
-        key: 'id'
-      }
+        model: 'users', // Matches the table name for the User model
+        key: 'id',
+      },
     },
     first_name: {
       type: DataTypes.STRING(100),
@@ -20,13 +22,11 @@ module.exports = (sequelize, DataTypes) => {
     last_name: {
       type: DataTypes.STRING(100),
     },
-    // This is a "virtual" field that doesn't exist in the database
-    // but is generated automatically by Sequelize for convenience.
     full_name: {
       type: DataTypes.VIRTUAL,
       get() {
         return `${this.first_name || ''} ${this.last_name || ''}`.trim();
-      }
+      },
     },
     date_of_birth: {
       type: DataTypes.DATE,
@@ -44,18 +44,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
     },
   }, {
-    // Sequelize options
     tableName: 'profiles',
     timestamps: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
   });
 
-  // Define the association back to the User model
   Profile.associate = (models) => {
     Profile.belongsTo(models.User, {
       foreignKey: 'user_id',
-      as: 'user'
+      as: 'user',
     });
   };
 

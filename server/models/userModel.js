@@ -1,6 +1,8 @@
-const bcrypt = require('bcryptjs');
+// --- File: models/user.js ---
 
-module.exports = (sequelize, DataTypes) => {
+import bcrypt from 'bcryptjs';
+
+export const UserModel = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     id: {
       type: DataTypes.BIGINT,
@@ -56,34 +58,29 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 0,
     },
   }, {
-    // Sequelize options
     tableName: 'users',
     timestamps: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
     hooks: {
-      // This "hook" automatically hashes the password before a user is created
       beforeCreate: async (user) => {
         if (user.password_hash) {
           const salt = await bcrypt.genSalt(10);
           user.password_hash = await bcrypt.hash(user.password_hash, salt);
         }
       },
-    }
+    },
   });
 
-  // This instance method will be used to compare the entered password with the hashed password
+  // Instance method to compare passwords
   User.prototype.comparePassword = async function (enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password_hash);
   };
 
-  // Define associations to other models
+  // Associations
   User.associate = (models) => {
-    User.hasOne(models.Profile, {
-      foreignKey: 'user_id',
-      as: 'profile'
-    });
-    // We will add more associations here later (e.g., for Orders, Addresses)
+    User.hasOne(models.Profile, { foreignKey: 'user_id', as: 'profile' });
+    // Additional associations (Orders, Addresses, etc.) can be added later
   };
 
   return User;

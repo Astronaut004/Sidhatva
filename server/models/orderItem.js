@@ -1,4 +1,6 @@
-module.exports = (sequelize, DataTypes) => {
+// --- File: models/orderItem.js ---
+
+export const OrderItemModel = (sequelize, DataTypes) => {
   const OrderItem = sequelize.define('OrderItem', {
     id: {
       type: DataTypes.BIGINT,

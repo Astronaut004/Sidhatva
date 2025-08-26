@@ -1,11 +1,12 @@
+// authValidator.js
 // This file defines the validation rules for incoming requests
 // related to authentication, such as registration and login.
 
-const { body } = require('express-validator');
-const { handleValidationErrors } = require('../middleware/validationMiddleware');
+import { body } from 'express-validator';
+import { handleValidationErrors } from '../middleware/validationMiddleware.js';
 
 // Validation rules for the user registration endpoint
-exports.registerValidator = [
+export const registerValidator = [
   body('email')
     .isEmail().withMessage('Please provide a valid email address.')
     .normalizeEmail(), // Sanitizes the email (e.g., converts to lowercase)
@@ -29,7 +30,7 @@ exports.registerValidator = [
 ];
 
 // Validation rules for the user login endpoint
-exports.loginValidator = [
+export const loginValidator = [
   body('email')
     .isEmail().withMessage('Please provide a valid email address.')
     .normalizeEmail(),

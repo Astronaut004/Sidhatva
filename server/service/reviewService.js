@@ -1,6 +1,4 @@
-// --- File: services/reviewService.js ---
-
-const { Review, Product, sequelize } = require('../models');
+import { Review, Product, sequelize } from '../models';
 
 /**
  * Creates a new review for a product and updates the product's average rating.
@@ -9,7 +7,7 @@ const { Review, Product, sequelize } = require('../models');
  * @param {object} reviewData - The review data { rating, comment }.
  * @returns {Promise<object>} The newly created review.
  */
-exports.createReview = async (userId, productId, reviewData) => {
+export const createReview = async (userId, productId, reviewData) => {
   const { rating, comment } = reviewData;
 
   const t = await sequelize.transaction();
@@ -50,9 +48,9 @@ exports.createReview = async (userId, productId, reviewData) => {
     await t.rollback();
     // Handle unique constraint error (user already reviewed)
     if (error.name === 'SequelizeUniqueConstraintError') {
-        const customError = new Error('You have already reviewed this product.');
-        customError.statusCode = 409; // Conflict
-        throw customError;
+      const customError = new Error('You have already reviewed this product.');
+      customError.statusCode = 409; // Conflict
+      throw customError;
     }
     throw error;
   }
@@ -63,17 +61,17 @@ exports.createReview = async (userId, productId, reviewData) => {
  * @param {number} productId - The ID of the product.
  * @returns {Promise<Array>} An array of reviews for the product.
  */
-exports.getProductReviews = async (productId) => {
-    return Review.findAll({
-        where: { product_id: productId, is_approved: true },
-        include: {
-            association: 'user',
-            attributes: ['id'],
-            include: {
-                association: 'profile',
-                attributes: ['first_name']
-            }
-        },
-        order: [['created_at', 'DESC']]
-    });
+export const getProductReviews = async (productId) => {
+  return Review.findAll({
+    where: { product_id: productId, is_approved: true },
+    include: {
+      association: 'user',
+      attributes: ['id'],
+      include: {
+        association: 'profile',
+        attributes: ['first_name'],
+      },
+    },
+    order: [['created_at', 'DESC']],
+  });
 };
