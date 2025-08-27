@@ -1,0 +1,5 @@
+export default (sequelize, DataTypes) => {
+  const Review = sequelize.define('Review', { id: { type: DataTypes.BIGINT, primaryKey: true, autoIncrement: true, }, product_id: { type: DataTypes.BIGINT, allowNull: false, references: { model: 'products', key: 'id' } }, user_id: { type: DataTypes.BIGINT, allowNull: false, references: { model: 'users', key: 'id' } }, rating: { type: DataTypes.INTEGER, allowNull: false, validate: { min: 1, max: 5 } }, comment: { type: DataTypes.TEXT, }, is_approved: { type: DataTypes.BOOLEAN, defaultValue: true, }, }, { tableName: 'reviews', timestamps: true, createdAt: 'created_at', updatedAt: 'updated_at', indexes: [{ unique: true, fields: ['product_id', 'user_id'] }] });
+  Review.associate = (models) => { Review.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' }); Review.belongsTo(models.Product, { foreignKey: 'product_id', as: 'product' }); };
+  return Review;
+};

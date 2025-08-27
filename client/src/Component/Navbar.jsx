@@ -38,7 +38,7 @@ const Navbar = () => {
             <Link to='/decor' >Luxury Decor</Link>
             <Link to='/About' >About</Link>
             <Link to='/Contact' >Contact</Link>
-            <Link to='/user-profile' >PROFILE</Link>
+            <Link to='/productCategory' >category</Link>
           </div>
 
           {/* Search - Desktop */}

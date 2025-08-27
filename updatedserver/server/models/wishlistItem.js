@@ -1,0 +1,5 @@
+export default (sequelize, DataTypes) => {
+  const WishlistItem = sequelize.define('WishlistItem', { id: { type: DataTypes.BIGINT, primaryKey: true, autoIncrement: true, }, wishlist_id: { type: DataTypes.BIGINT, allowNull: false, references: { model: 'wishlists', key: 'id' } }, product_id: { type: DataTypes.BIGINT, allowNull: false, references: { model: 'products', key: 'id' } }, variant_id: { type: DataTypes.BIGINT, references: { model: 'product_variants', key: 'id' } }, }, { tableName: 'wishlist_items', timestamps: true, createdAt: 'added_at', updatedAt: 'updated_at', indexes: [{ unique: true, fields: ['wishlist_id', 'product_id', 'variant_id'] }] });
+  WishlistItem.associate = (models) => { WishlistItem.belongsTo(models.Wishlist, { foreignKey: 'wishlist_id', as: 'wishlist' }); WishlistItem.belongsTo(models.Product, { foreignKey: 'product_id', as: 'product' }); };
+  return WishlistItem;
+};
