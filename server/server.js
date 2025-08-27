@@ -1,50 +1,31 @@
-// temporary test change
-
-import express from "express"
-import dotenv from "dotenv";
-import pool from "./models/db.js";
-import cors from "cors";
-import authRoute from './routes/authRoute.js';
-import productRoute from './routes/productRoute.js';
-import orderRoute from './routes/orderRoute.js';
-import orderItemRoute from './routes/orderItemRoute.js';
-import cartRoute from "./routes/cartRoute.js";
-import productCategoryRoute from './routes/productCategoryRoute.js';
-import subCategoryRoute from './routes/subCategoryRoute.js';
-
-dotenv.config();
+import 'dotenv/config';
+import express from 'express';
+import cors from 'cors';
+import db from './models/index.js'; // Note the required .js extension
+import mainRouter from './routes/index.js';
+import { errorHandler } from './middleware/errorMiddleware.js';
 
 const app = express();
 
-// other imports and setup...
-
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use('/api/auth', authRoute);
-app.use('/api/products',productRoute);
-app.use('/api/orders', orderRoute);
-app.use('/api/order-items', orderItemRoute);
-app.use("/api/cart", cartRoute);
-app.use("/api/category", productCategoryRoute);
+// --- API Routes ---
+app.use('/api', mainRouter);
 
-app.use('/api/sub-category',subCategoryRoute);
+// --- Global Error Handler ---
+app.use(errorHandler);
 
+const PORT = process.env.PORT || 5000;
 
-
-
-app.get('/', async (req, res) => {
+// --- Start Server and Connect to Database ---
+app.listen(PORT, async () => {
+  console.log(`Server is running on port ${PORT}`);
   try {
-    const result = await pool.query('SELECT * FROM users');
-    res.json(result.rows);
-  } catch (err) {
-    console.error("DB Error:", err.message);
-    res.status(500).json({ message: "Failed to fetch users" });
+    await db.sequelize.authenticate();
+    console.log('Database connection has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
   }
 });
-
-
-app.listen(5001, ()=> {
-    console.log(`running on ${5001}`);
-    
-})

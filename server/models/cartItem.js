@@ -1,27 +1,5 @@
-// --- File: models/cartItem.js ---
-module.exports = (sequelize, DataTypes) => {
-  const CartItem = sequelize.define('CartItem', {
-    // ... (all the fields for the cart_items table)
-    id: {
-      type: DataTypes.BIGINT,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    cart_id: DataTypes.BIGINT,
-    product_id: DataTypes.BIGINT,
-    quantity: DataTypes.INTEGER,
-    // ...etc
-  }, {
-    tableName: 'cart_items',
-    timestamps: true,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
-  });
-
-  CartItem.associate = (models) => {
-    CartItem.belongsTo(models.Cart, { foreignKey: 'cart_id', as: 'cart' });
-    CartItem.belongsTo(models.Product, { foreignKey: 'product_id', as: 'product' });
-  };
-
+export default (sequelize, DataTypes) => {
+  const CartItem = sequelize.define('CartItem', { id: { type: DataTypes.BIGINT, primaryKey: true, autoIncrement: true, }, cart_id: { type: DataTypes.BIGINT, allowNull: false, references: { model: 'carts', key: 'id' } }, product_id: { type: DataTypes.BIGINT, allowNull: false, references: { model: 'products', key: 'id' } }, variant_id: { type: DataTypes.BIGINT, references: { model: 'product_variants', key: 'id' } }, quantity: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 1, }, unit_price: { type: DataTypes.DECIMAL(10, 2), allowNull: false, }, total_price: { type: DataTypes.DECIMAL(10, 2), allowNull: false, }, }, { tableName: 'cart_items', timestamps: true, createdAt: 'created_at', updatedAt: 'updated_at', indexes: [{ unique: true, fields: ['cart_id', 'product_id', 'variant_id'] }] });
+  CartItem.associate = (models) => { CartItem.belongsTo(models.Cart, { foreignKey: 'cart_id', as: 'cart' }); CartItem.belongsTo(models.Product, { foreignKey: 'product_id', as: 'product' }); };
   return CartItem;
 };

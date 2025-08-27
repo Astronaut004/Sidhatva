@@ -1,11 +1,6 @@
-// --- File: config/index.js ---
+import 'dotenv/config';
 
-// This file reads your .env file and exports the variables
-// in a clean, organized object for the rest of your application to use.
-
-require('dotenv').config();
-
-module.exports = {
+const config = {
   port: process.env.PORT || 5000,
   db: {
     dialect: process.env.DB_DIALECT || 'postgres',
@@ -17,6 +12,8 @@ module.exports = {
   },
   jwt: {
     secret: process.env.JWT_SECRET,
-    expiresIn: process.env.JWT_EXPIRES_IN || '1d',
+    expiresIn: process.env.JWT_EXPIRES_IN || '1h',
   },
 };
+
+export default config;

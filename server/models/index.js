@@ -1,23 +1,23 @@
-'use strict';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath, pathToFileURL } from 'url';
+import Sequelize from 'sequelize';
+import config from '../config/index.js';
 
-const fs = require('fs');
-const path = require('path');
-const Sequelize = require('sequelize');
-const process = require('process');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const basename = path.basename(__filename);
-const config = require('../config').db; // Make sure your config path is correct
 const db = {};
 
-// Initialize Sequelize with your database configuration
-const sequelize = new Sequelize(config.database, config.username, config.password, {
-  host: config.host,
-  port: config.port,
-  dialect: config.dialect,
-  logging: false, // Set to console.log to see SQL queries
+const sequelize = new Sequelize(config.db.database, config.db.username, config.db.password, {
+  host: config.db.host,
+  port: config.db.port,
+  dialect: config.db.dialect,
+  logging: false,
 });
 
-// Read all model files from the current directory
-fs
+// Dynamically import all model files from the directory
+const files = fs
   .readdirSync(__dirname)
   .filter(file => {
     return (
@@ -25,14 +25,18 @@ fs
       file !== basename &&
       file.slice(-3) === '.js'
     );
-  })
-  .forEach(file => {
-    // Import each model and initialize it
-    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
-    db[model.name] = model;
   });
 
-// Establish associations between models
+for (const file of files) {
+  // THE FIX: Use pathToFileURL to correctly create a URL for import()
+  const filePath = path.join(__dirname, file);
+  const moduleURL = pathToFileURL(filePath).href;
+  const module = await import(moduleURL);
+  
+  const model = module.default(sequelize, Sequelize.DataTypes);
+  db[model.name] = model;
+}
+
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
@@ -42,4 +46,6 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-module.exports = db;
+// Export all models individually and as part of the db object
+export const { User, Profile, Product, ProductCategory, Brand, Cart, CartItem, Order, OrderItem, Address, Wishlist, WishlistItem, Review } = db;
+export default db;

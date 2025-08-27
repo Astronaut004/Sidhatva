@@ -1,7 +1,7 @@
-const { body } = require('express-validator');
-const { handleValidationErrors } = require('../middleware/validationMiddleware');
+import { body } from 'express-validator';
+import { handleValidationErrors } from '../middleware/validationMiddleware.js';
 
-exports.addressValidator = [
+export const addressValidator = [
   body('recipient_name')
     .trim()
     .notEmpty().withMessage('Recipient name is required.'),
@@ -27,6 +27,5 @@ exports.addressValidator = [
     .trim()
     .notEmpty().withMessage('Country is required.'),
 
-  // This middleware will process any validation errors.
   handleValidationErrors,
 ];

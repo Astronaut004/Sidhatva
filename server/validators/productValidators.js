@@ -1,7 +1,7 @@
-const { body } = require('express-validator');
-const { handleValidationErrors } = require('../middleware/validationMiddleware');
+import { body } from 'express-validator';
+import { handleValidationErrors } from '../middleware/validationMiddleware.js';
 
-exports.createProductValidator = [
+export const createProductValidator = [
   body('name')
     .trim()
     .notEmpty().withMessage('Product name is required.')
@@ -24,6 +24,5 @@ exports.createProductValidator = [
     .notEmpty().withMessage('Brand ID is required.')
     .isInt({ gt: 0 }).withMessage('A valid brand ID is required.'),
 
-  // This middleware will process any validation errors.
   handleValidationErrors,
 ];

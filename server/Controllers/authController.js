@@ -1,58 +1,26 @@
-import pool from "../models/db.js";
-import bcrypt from "bcryptjs";
-import { generateToken } from "../utils/generateToken.js";
+import asyncHandler from '../utils/asyncHandler.js';
+import * as authService from '../services/authService.js';
+import generateToken from '../utils/generateToken.js';
+import ApiResponse from '../utils/apiResponse.js';
 
-// REGISTER USER
-export const register = async (req, res) => {
-  const { email, phone, password, role } = req.body;
-  const salt = 12;
+const registerUser = asyncHandler(async (req, res) => {
+  const { email, password, firstName, lastName, phone } = req.body;
+  const newUser = await authService.register({ email, password, firstName, lastName, phone });
+  const token = generateToken({ id: newUser.id, role: newUser.role });
+  res.status(201).json(new ApiResponse(201, { user: newUser, token }, 'User registered successfully.'));
+});
 
-  try {
-    const hashPassword = await bcrypt.hash(password, salt);
-
-    const result = await pool.query(
-      `INSERT INTO users (email, phone, password, role) 
-       VALUES ($1, $2, $3, $4) 
-       RETURNING id, email, phone, role`,
-      [email, phone, hashPassword, role]
-    );
-
-    const user = result.rows[0];
-    const token = generateToken({ id: user.id, email: user.email, role: user.role });
-
-    res.status(201).json({ user, token });
-  } catch (err) {
-    console.error("❌ Register error:", err.message);
-    res.status(500).json({ message: "Registration failed" });
-  }
-};
-
-// LOGIN USER
-export const login = async (req, res) => {
+const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
+  const user = await authService.login(email, password);
+  const token = generateToken({ id: user.id, role: user.role });
+  res.status(200).json(new ApiResponse(200, { user, token }, 'Login successful.'));
+});
 
-  try {
-    const userRe = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
-    const user = userRe.rows[0];
+const getCurrentUser = asyncHandler(async (req, res) => {
+  const user = req.user;
+  res.status(200).json(new ApiResponse(200, user));
+});
 
-    if (!user) return res.status(400).json({ message: "User not found" });
+export default { registerUser, loginUser, getCurrentUser };
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(401).json({ message: "Wrong credentials" });
-
-    const token = generateToken({ id: user.id, email: user.email, role: user.role });
-
-    res.status(200).json({
-      user: {
-        id: user.id,
-        email: user.email,
-        phone: user.phone,
-        role: user.role
-      },
-      token
-    });
-  } catch (err) {
-    console.error("❌ Login error:", err.message);
-    res.status(500).json({ message: "Login failed" });
-  }
-};
