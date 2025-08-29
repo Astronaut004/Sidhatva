@@ -47,5 +47,5 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 // Export all models individually and as part of the db object
-export const { User, Profile, Product, ProductCategory, Brand, Cart, CartItem, Order, OrderItem, Address, Wishlist, WishlistItem, Review } = db;
+export const { User, Profile, Product, ProductCategory, Brand, Cart, CartItem, Order, OrderItem, Address, Wishlist, WishlistItem, Review, Otp, Material, Color, ProductVariant, ProductImage, SchemeMaster, Tax, Payment, Shipment, StockTransaction, Invoice, InvoiceItem, Return, ReturnItem, Refund, ReturnExchange } = db;
 export default db;
