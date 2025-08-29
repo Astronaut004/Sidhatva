@@ -46,6 +46,7 @@ export default (sequelize) => {
         type: DataTypes.BIGINT,
         references: { model: "sub_categories", key: "id" },
         onDelete: "CASCADE",
+        allowNull: true,
       },
       brand_id: {
         type: DataTypes.BIGINT,
@@ -179,25 +180,26 @@ export default (sequelize) => {
 
   // Associations
   Product.associate = (models) => {
+    // Category is always present
     Product.belongsTo(models.ProductCategory, {
       foreignKey: "category_id",
+      allowNull: false,
     });
-    Product.belongsTo(models.SubCategory, {
-      foreignKey: "sub_category_id",
-    });
-    Product.belongsTo(models.Brand, {
-      foreignKey: "brand_id",
-    });
-    Product.belongsTo(models.Material, {
-      foreignKey: "material_id",
-    });
-    Product.belongsTo(models.Color, {
-      foreignKey: "color_id",
-    });
-    Product.belongsTo(models.User, {
-      foreignKey: "created_by",
-    });
+
+    // SubCategory is optional
+    if (models.SubCategory) {
+      Product.belongsTo(models.productSubCategory, {
+        foreignKey: "sub_category_id",
+        allowNull: true,
+      });
+    }
+
+    Product.belongsTo(models.Brand, { foreignKey: "brand_id" });
+    Product.belongsTo(models.Material, { foreignKey: "material_id" });
+    Product.belongsTo(models.Color, { foreignKey: "color_id" });
+    Product.belongsTo(models.User, { foreignKey: "created_by" });
   };
+
 
   return Product;
 };

@@ -62,7 +62,7 @@ export default (sequelize, DataTypes) => {
     });
 
     // 🔗 A zone can have multiple shipping rates/methods
-    ShippingZone.hasMany(models.ShippingMethod, {
+    ShippingZone.hasMany(models.Shipment, {
       foreignKey: "zone_id",
       as: "shippingMethods",
       onDelete: "CASCADE",
