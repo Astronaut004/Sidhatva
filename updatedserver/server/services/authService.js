@@ -111,7 +111,7 @@ export const sendOtp = async ({ identifier, purpose }) => {
   }
 
   // --- Generate new OTP ---
-  const otpCode = Math.floor(100000 + Math.random() * 900000).toString(); // simple 6-digit
+  const otpCode = generateOtp(); // simple 6-digit
   const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 mins expiry
 
   await Otp.create({
@@ -206,4 +206,8 @@ export const verifyOtpAndLogin = async (req, res) => {
     console.error(error);
     return res.status(500).json({ message: "Server error" });
   }
+};
+
+export const logoutUser = async ({ userId }) => {
+  return { message: "Logout successful", userId };
 };
