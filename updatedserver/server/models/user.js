@@ -77,20 +77,20 @@ export default (sequelize, DataTypes) => {
       timestamps: true,
       createdAt: "created_at",
       updatedAt: "updated_at",
-      hooks: {
-        beforeCreate: async (user) => {
-          if (user.password_hash) {
-            const salt = await bcrypt.genSalt(12);
-            user.password_hash = await bcrypt.hash(user.password_hash, salt);
-          }
-        },
-        beforeUpdate: async (user) => {
-          if (user.changed("password_hash")) {
-            const salt = await bcrypt.genSalt(12);
-            user.password_hash = await bcrypt.hash(user.password_hash, salt);
-          }
-        },
-      },
+      // hooks: {
+      //   beforeCreate: async (user) => {
+      //     if (user.password_hash) {
+      //       const salt = await bcrypt.genSalt(12);
+      //       user.password_hash = await bcrypt.hash(user.password_hash, salt);
+      //     }
+      //   },
+      //   beforeUpdate: async (user) => {
+      //     if (user.changed("password_hash")) {
+      //       const salt = await bcrypt.genSalt(12);
+      //       user.password_hash = await bcrypt.hash(user.password_hash, salt);
+      //     }
+      //   },
+      // },
     }
   );
 
