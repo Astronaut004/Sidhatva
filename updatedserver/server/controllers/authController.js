@@ -1,26 +1,72 @@
-import asyncHandler from '../utils/asyncHandler.js';
-import * as authService from '../services/authService.js';
-import generateToken from '../utils/generateToken.js';
-import ApiResponse from '../utils/apiResponse.js';
+import * as authService from "../services/authService.js";
+import ApiResponse from "../utils/apiResponse.js";
+import asyncHandler from "../utils/asyncHandler.js";
 
-const registerUser = asyncHandler(async (req, res) => {
-  const { email, password, firstName, lastName, phone } = req.body;
-  const newUser = await authService.register({ email, password, firstName, lastName, phone });
-  const token = generateToken({ id: newUser.id, role: newUser.role });
-  res.status(201).json(new ApiResponse(201, { user: newUser, token }, 'User registered successfully.'));
+// export const register = asyncHandler(async (req, res) => {
+//     const { email, phone, password, role} = req.body;
+//     const result = await authService.registerUser({email, phone, password, role});
+//     res.status(201).json(new ApiResponse(201, result, "user Register Succeful"));
+// });
+
+export const register = asyncHandler(async (req, res) => {
+    const { identifier, password, role } = req.body;
+
+    let email = null;
+    let phone = null;
+
+    // Detect if identifier is email or phone
+    if (/^\S+@\S+\.\S+$/.test(identifier)) {
+        email = identifier;
+    } else if (/^\+?\d{10,15}$/.test(identifier)) {
+        phone = identifier;
+    } else {
+        throw new Error("Invalid identifier. Must be a valid email or phone number");
+    }
+
+    const result = await authService.registerUser({ email, phone, password, role });
+    res.status(201).json(new ApiResponse(201, result, "User registered successfully"));
 });
 
-const loginUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
-  const user = await authService.login(email, password);
-  const token = generateToken({ id: user.id, role: user.role });
-  res.status(200).json(new ApiResponse(200, { user, token }, 'Login successful.'));
+
+export const login = asyncHandler(async (req, res) => {
+  const { identifier, password } = req.body;
+
+  let email = null;
+  let phone = null;
+
+  // Detect if identifier is email or phone
+  if (/^\S+@\S+\.\S+$/.test(identifier)) {
+    email = identifier;
+  } else if (/^\+?\d{10,15}$/.test(identifier)) {
+    phone = identifier;
+  } else {
+    throw new Error("Invalid identifier. Must be a valid email or phone number");
+  }
+
+  const result = await authService.loginUser({ email, phone, password });
+  res.json(new ApiResponse(200, result, "Login successful"));
 });
 
-const getCurrentUser = asyncHandler(async (req, res) => {
-  const user = req.user;
-  res.status(200).json(new ApiResponse(200, user));
+export const sendOtp = asyncHandler(async (req, res) => {
+  const { identifier, purpose } = req.body;
+  const result = await authService.sendOtp({ identifier, purpose });
+  res.json(new ApiResponse(200, result, "OTP sent successfully"));
 });
 
-export default { registerUser, loginUser, getCurrentUser };
+export const verifyOtp = asyncHandler(async (req, res) => {
+  const { identifier, otp, purpose, role } = req.body;
+  const result = await authService.verifyOtpAndLogin({ identifier, otp, purpose, role });
+  res.json(new ApiResponse(200, result, "OTP verified successfully"));
+});
 
+export const logout = asyncHandler(async (req, res) => {
+  // Assuming you set req.user from JWT middleware
+  const userId = req.user?.id;
+
+  const result = await authService.logoutUser({ userId });
+
+  // If token in cookie → clear it
+  res.clearCookie("token");
+
+  res.json(new ApiResponse(200, result, "Logout successful"));
+});
