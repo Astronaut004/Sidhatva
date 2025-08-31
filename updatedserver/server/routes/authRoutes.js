@@ -1,12 +1,17 @@
-import express from 'express';
-import authController from '../controllers/authController.js';
-import { registerValidator, loginValidator } from '../validators/authValidators.js';
-import { protect } from '../middleware/authMiddleware.js';
+// routes/authRoutes.js
+import express from "express";
+import { register, login, sendOtp, verifyOtp, logout } from "../controllers/authController.js";
+import { protect } from "../middleware/authMiddleware.js"; // JWT verification middleware
 
 const router = express.Router();
 
-router.post('/register', registerValidator, authController.registerUser);
-router.post('/login', loginValidator, authController.loginUser);
-router.get('/me', protect, authController.getCurrentUser);
+// Public routes
+router.post("/register", register);
+router.post("/login", login);
+router.post("/send-otp", sendOtp);
+router.post("/verify-otp", verifyOtp);
+
+// Protected route
+router.post("/logout", protect, logout);
 
 export default router;
