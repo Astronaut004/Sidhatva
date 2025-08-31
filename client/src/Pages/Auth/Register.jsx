@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import AlertBox from "../../ui/AlertBox";
 
 const Register = () => {
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [identifier, setIdentifier] = useState(""); // Single field for email/phone
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({ show: false, type: "", message: "" });
@@ -14,42 +13,76 @@ const Register = () => {
   };
 
   const authHandle = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!email && !phone) {
-    showAlert("error", "Please enter email or phone");
-    return;
-  }
-
-  const identifier = email || phone;
-  const payload = { identifier, password };
-
-  try {
-    const API_BASE = import.meta.env.VITE_BACKEND_API || "http://localhost:5001";
-    console.log("API_BASE:", API_BASE);
-    console.log("Payload being sent:", payload);
-
-    const res = await fetch(`${API_BASE}/api/auth/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      showAlert("error", data.message || "Registration failed");
+    if (!identifier) {
+      showAlert("error", "Please enter email or phone number");
       return;
     }
 
-    showAlert("success", "Registration successful!");
-    window.location.href = "/login";
-  } catch (err) {
-    console.error("Register error:", err);
-    showAlert("error", "Something went wrong, please try again later.");
-  }
-};
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier);
+    const isPhone = /^(\d{10}|\d{12,13})$/.test(identifier); // 10 or 12-13 digits
 
+    if (!isEmail && !isPhone) {
+      showAlert("error", "Please enter a valid email or phone number");
+      return;
+    }
+
+    // ✅ Password Validation
+    if (password.length < 8) {
+      showAlert("error", "Password must be at least 8 characters long");
+      return;
+    }
+    if (!/[A-Z]/.test(password)) {
+      showAlert("error", "Password must contain at least one uppercase letter");
+      return;
+    }
+    if (!/[a-z]/.test(password)) {
+      showAlert("error", "Password must contain at least one lowercase letter");
+      return;
+    }
+    if (!/[0-9]/.test(password)) {
+      showAlert("error", "Password must contain at least one number");
+      return;
+    }
+    if (!/[@$!%*?&]/.test(password)) {
+      showAlert("error", "Password must contain at least one special character (@$!%*?&)");
+      return;
+    }
+
+    const payload = { identifier, password };
+
+    try {
+      setLoading(true);
+      const API_BASE = import.meta.env.VITE_BACKEND_API || "http://localhost:5001";
+      console.log("API_BASE:", API_BASE);
+      console.log("Payload being sent:", payload);
+
+      const res = await fetch(`${API_BASE}/api/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        showAlert("error", data.message || "Registration failed");
+        return;
+      }
+
+      showAlert("success", "🎉 Registration successful!");
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 2000);
+
+    } catch (err) {
+      console.error("Register error:", err);
+      showAlert("error", "Something went wrong, please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-sky-50 flex items-center justify-center p-4">
@@ -64,37 +97,24 @@ const Register = () => {
         </div>
 
         <form onSubmit={authHandle} className="space-y-5">
-          {/* Email */}
-          <input
-            type="email"
-            placeholder="Email Address"
-            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            disabled={loading}
-          />
-
-          {/* Phone */}
           <input
             type="text"
-            placeholder="Mobile Number"
-            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            placeholder="Email Address or Mobile Number"
+            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sky-400"
+            value={identifier}
+            onChange={(e) => setIdentifier(e.target.value)}
             disabled={loading}
           />
 
-          {/* Password */}
           <input
             type="password"
             placeholder="Password"
-            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg"
+            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sky-400"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={loading}
           />
 
-          {/* Submit */}
           <button
             type="submit"
             disabled={loading}
@@ -108,7 +128,6 @@ const Register = () => {
           </button>
         </form>
 
-        {/* Login redirect */}
         <p className="text-center text-gray-500 mt-8 text-sm">
           Already have an account?{" "}
           <a href="/login" className="text-sky-600 hover:underline font-medium">
