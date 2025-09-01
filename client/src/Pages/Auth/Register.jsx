@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import AlertBox from "../../ui/AlertBox";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../../slices/authSlice";
+
 
 const Register = () => {
   const [identifier, setIdentifier] = useState(""); // Single field for email/phone
@@ -70,10 +73,13 @@ const Register = () => {
         showAlert("error", data.message || "Registration failed");
         return;
       }
+      dispatch(
+        loginSuccess({ user: data.data.user, token: data.data.token })
+      );
 
       showAlert("success", "🎉 Registration successful!");
       setTimeout(() => {
-        window.location.href = "/login";
+        window.location.href = "/dashboard";   
       }, 2000);
 
     } catch (err) {
