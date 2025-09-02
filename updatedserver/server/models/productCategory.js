@@ -44,11 +44,12 @@ export default (sequelize, DataTypes) => {
       updatedAt: 'updated_at',
       hooks: {
         beforeValidate: (category) => {
-          if (category.name) {
+          if (category.name && !category.slug) {
             category.slug = slugify(category.name, { lower: true, strict: true });
           }
         },
       },
+
     }
   );
 
