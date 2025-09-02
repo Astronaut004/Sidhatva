@@ -4,6 +4,7 @@ import { User, Otp } from '../models/index.js';
 import { generateOtp } from '../utils/otpGenerator.js';
 import { Op } from "sequelize";
 import { sendOtpEmail } from '../utils/sendEmail.js';
+import generateToken from '../utils/generateToken.js';
 
 
 export const registerUser = async ({ email, phone, password, role }) => {
@@ -48,11 +49,12 @@ export const registerUser = async ({ email, phone, password, role }) => {
   });
 
   // Generate token immediately
-  const token = jwt.sign(
-    { id: user.id, role: user.role },
-    process.env.JWT_SECRET,
-    { expiresIn: '7d' }
-  );
+  // const token = jwt.sign(
+  //   { id: user.id, role: user.role },
+  //   process.env.JWT_SECRET,
+  //   { expiresIn: '7d' }
+  // );
+  const token = generateToken({ id : user.id, role: user.role});
 
   return {
     message: 'User registered successfully',
@@ -77,7 +79,7 @@ export const loginUser = async ({ email, phone, password }) => {
   const isValid = password ? await bcrypt.compare(password, user.password_hash) : false;
   if (!isValid) throw new Error(`Invalid credentials ${password} ${phone}`);
 
-  const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
+  const token = generateToken({ id: user.id, role: user.role });
   return { token, user };
 };
 
@@ -122,12 +124,14 @@ export const sendOtp = async ({ identifier, purpose }) => {
     purpose,
     expires_at: expiresAt,
   });
-  
+
   if (identifier_type === "email") {
     await sendOtpEmail(identifier, otpCode);
   }
 
-
+  if (identifier_type === "phone") {
+    throw new Error("Phone OTP is not supported yet.");
+  }
 
   // TODO: send otpCode via email/SMS
   return { message: "OTP sent successfully", identifier_type, otp: otpCode };
@@ -195,11 +199,12 @@ export const verifyOtpAndLogin = async ({ identifier, otp, purpose = "login", ro
     }
 
     // Generate JWT
-    const token = jwt.sign(
-      { id: user.id, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: "7d" }
-    );
+    // const token = jwt.sign(
+    //   { id: user.id, role: user.role },
+    //   process.env.JWT_SECRET,
+    //   { expiresIn: "7d" }
+    // );
+    const token = generateToken({ id: user.id, role: user.role });
 
     // ✅ Return clean result (not res.json)
     return {
