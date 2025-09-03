@@ -1,4 +1,4 @@
-import generateSlug from "./generateSlug";
+import generateSlug from "./generateSlug.js";
 
 export default function generateSeoTitle(name, description) {
   let base;
