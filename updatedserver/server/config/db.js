@@ -1,20 +1,17 @@
-import { Pool } from 'pg';
-import dotenv from 'dotenv';
+// import { Sequelize } from 'sequelize';
+// import dotenv from 'dotenv';
+// dotenv.config();
 
+// const sequelize = new Sequelize(
+//   process.env.DB_NAME,
+//   process.env.DB_USER,
+//   process.env.DB_PASSWORD,
+//   {
+//     host: process.env.DB_HOST,
+//     port: process.env.DB_PORT,
+//     dialect: 'postgres',
+//     logging: false,
+//   }
+// );
 
-dotenv.config();
-
-const pool = new Pool({
-    user : process.env.DB_USER,
-    host : process.env.DB_HOST,
-    database : process.env.DB_NAME,
-    password : process.env.DB_PASS,
-    DB_PORT : process.env.DB_PORT,
-
-});
-
-pool.connect()
-    .then(() => console.log('datbase connected success'))
-    .catch((err) => console.error('❌ Database connection failed:', err.message));
-
-export default pool;
+// export default sequelize;
