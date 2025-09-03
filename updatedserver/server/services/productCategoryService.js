@@ -3,6 +3,7 @@
 import { ProductCategory } from "../models/index.js";
 import generateSlug from "../utils/generateSlug.js";
 import generateSeoTitle from "../utils/seoGenerate.js";
+import { Op } from 'sequelize';
 
 // services --> getallCategory, getCategoryBySlug, createCategory, updateCategory, deleteCategory, changeStateCategory
 
@@ -22,53 +23,42 @@ export const createCategory = async ({ name, description = "", seo_title, is_act
     throw new Error("Name cannot exceed 255 characters");
   }
 
-  try {
-    // Check for existing category (case-insensitive)
-    const existingCategory = await ProductCategory.findOne({ 
-      where: { 
-        name: {
-          [Op.iLike]: trimmedName // Case-insensitive check
-        }
-      } 
-    });
-
-    if (existingCategory) {
-      throw new Error(`Category with name "${trimmedName}" already exists`);
+  // Check for existing category (case-insensitive)
+  const existingCategory = await ProductCategory.findOne({
+    where: {
+      name: {
+        [Op.iLike]: trimmedName
+      }
     }
+  });
 
-    const slug = generateSlug(trimmedName);
-    
-    // Check for slug conflicts
-    const existingSlug = await ProductCategory.findOne({ where: { slug } });
-    if (existingSlug) {
-      throw new Error(`A category with this slug already exists`);
-    }
-
-    const finalSeoTitle = seo_title || generateSeoTitle(trimmedName, description);
-
-    const category = await ProductCategory.create({
-      name: trimmedName,
-      description: description.trim(),
-      slug,
-      seo_title: finalSeoTitle,
-      is_active,
-    });
-
-    return {
-      success: true,
-      message: "Category created successfully",
-      category: category.toJSON(),
-    };
-  } catch (error) {
-    // Log error for debugging
-    console.error('Error creating category:', error);
-    
-    // Re-throw known errors, wrap unknown ones
-    if (error.message.includes('already exists') || error.message.includes('required')) {
-      throw error;
-    }
-    throw new Error('Failed to create category. Please try again.');
+  if (existingCategory) {
+    throw new Error(`Category with name "${trimmedName}" already exists`);
   }
+
+  const slug = generateSlug(trimmedName);
+
+  // Check for slug conflicts
+  const existingSlug = await ProductCategory.findOne({ where: { slug } });
+  if (existingSlug) {
+    throw new Error(`A category with this slug already exists`);
+  }
+
+  const finalSeoTitle = seo_title || generateSeoTitle(trimmedName, description);
+
+  const category = await ProductCategory.create({
+    name: trimmedName,
+    description: description.trim(),
+    slug,
+    seo_title: finalSeoTitle,
+    is_active,
+  });
+
+  return {
+    success: true,
+    message: "Category created successfully",
+    category: category.toJSON(),
+  };
 };
 
 export const getAllActiveCategories = async ({ limit, offset, search } = {}) => {
