@@ -6,6 +6,7 @@ import orderRoutes from './orderRoutes.js';
 import addressRoutes from './addressRoutes.js';
 import wishlistRoutes from './wishlistRoutes.js';
 import adminRoutes from './adminRoutes.js';
+import productCategoryRoutes from './productCategoryRoutes.js'
 
 const router = express.Router();
 
@@ -17,5 +18,6 @@ router.use('/orders', orderRoutes);
 router.use('/addresses', addressRoutes);
 router.use('/wishlist', wishlistRoutes);
 router.use('/admin', adminRoutes);
+router.use('/category', productCategoryRoutes);
 
 export default router;
