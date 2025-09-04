@@ -1,5 +1,5 @@
 import express from "express";
-import { createCategoryHandler, getAllActiveCategoriesHandler, getAllCategoriesHandler, getCategoryBySlugHandler, updateCategoryHandler, deleteCategoryHandler, getCategoryByIdHandler, getCategoriesWithProductCountHandler } from "../controllers/productCategoryController.js";
+import { createCategoryHandler, getAllActiveCategoriesHandler, getAllCategoriesHandler, getCategoryBySlugHandler, updateCategoryHandler, deleteCategoryHandler, getCategoryByIdHandler } from "../controllers/productCategoryController.js";
 import { createCategoryValidator } from "../validators/categoryValidator.js";
 import { handleValidationErrors } from "../middleware/validationMiddleware.js";
 import { protect } from "../middleware/authMiddleware.js";
@@ -16,7 +16,11 @@ router.post(
     authorize('admin'),
     createCategoryHandler
 );
-router.get("/active", getAllActiveCategoriesHandler);
+router.get(
+  "/active", 
+  protect,
+  authorize("admin", "vendor"),
+  getAllActiveCategoriesHandler);
 
 // ✅ Get all categories (admin or staff, includes inactive)
 router.get(
@@ -26,9 +30,6 @@ router.get(
   getAllCategoriesHandler
 );
 
-// ✅ Get categories with product count (public)
-router.get("/with-product-count", getCategoriesWithProductCountHandler);
-
 // ✅ Get category by slug (public)
 router.get("/slug/:slug", getCategoryBySlugHandler);
 
@@ -36,14 +37,13 @@ router.get("/slug/:slug", getCategoryBySlugHandler);
 router.get(
   "/:id",
   protect,
-  authorize("admin", "staff"),
+  authorize("admin", "vendor"),
   getCategoryByIdHandler
 );
 
 // ✅ Update category (Admin only)
 router.put(
   "/:id",
-  updateCategoryValidator,
   handleValidationErrors,
   protect,
   authorize("admin"),

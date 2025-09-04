@@ -63,8 +63,3 @@ export const getCategoryByIdHandler = asyncHandler(async (req, res) => {
   res.json(new ApiResponse(200, result, result.message || "Category fetched successfully"));
 });
 
-export const getCategoriesWithProductCountHandler = asyncHandler(async (req, res) => {
-  const result = await getCategoriesWithProductCount();
-
-  res.json(new ApiResponse(200, result, "Categories with product count fetched successfully"));
-});
