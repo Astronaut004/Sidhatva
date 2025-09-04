@@ -5,7 +5,8 @@ import asyncHandler from "../utils/asyncHandler.js";
 
 export const createCategoryHandler = asyncHandler(async (req, res) => {
     const {name, description, seo_title, is_active} = req.body;
-    const category = await createCategory({name, description, seo_title, is_active});
+    const created_by = req.user.id;
+    const category = await createCategory({name, description, seo_title, is_active, userId: req.user.id,});
     res.json(new ApiResponse(200, category, "Category created successfully"));
 });
 
