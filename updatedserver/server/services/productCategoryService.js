@@ -1,6 +1,6 @@
 // productCategoryService.js
 
-import { ProductCategory } from "../models/index.js";
+import { ProductCategory, Product } from "../models/index.js";
 import generateSlug from "../utils/generateSlug.js";
 import generateSeoTitle from "../utils/seoGenerate.js";
 import { Op } from 'sequelize';
@@ -8,58 +8,42 @@ import { Op } from 'sequelize';
 // services --> getallCategory, getCategoryBySlug, createCategory, updateCategory, deleteCategory, changeStateCategory
 
 
-export const createCategory = async ({ name, description = "", seo_title, is_active = true }) => {
-  // Input validation
-  if (!name || typeof name !== 'string') {
-    throw new Error("Name is required and must be a string");
+export const createCategory = async ({ name, description = "", seo_title, is_active = true, userId }) => {
+  if (!name || typeof name !== "string" || name.trim().length === 0) {
+    throw { code: "INVALID_NAME", message: "Name is required and must be a non-empty string" };
   }
 
-  // Trim and validate name length
   const trimmedName = name.trim();
-  if (trimmedName.length === 0) {
-    throw new Error("Name cannot be empty");
-  }
   if (trimmedName.length > 255) {
-    throw new Error("Name cannot exceed 255 characters");
-  }
-
-  // Check for existing category (case-insensitive)
-  const existingCategory = await ProductCategory.findOne({
-    where: {
-      name: {
-        [Op.iLike]: trimmedName
-      }
-    }
-  });
-
-  if (existingCategory) {
-    throw new Error(`Category with name "${trimmedName}" already exists`);
+    throw { code: "INVALID_NAME", message: "Name cannot exceed 255 characters" };
   }
 
   const slug = generateSlug(trimmedName);
-
-  // Check for slug conflicts
-  const existingSlug = await ProductCategory.findOne({ where: { slug } });
-  if (existingSlug) {
-    throw new Error(`A category with this slug already exists`);
-  }
-
   const finalSeoTitle = seo_title || generateSeoTitle(trimmedName, description);
 
-  const category = await ProductCategory.create({
-    name: trimmedName,
-    description: description.trim(),
-    slug,
-    seo_title: finalSeoTitle,
-    is_active,
-  });
+  try {
+    const category = await ProductCategory.create({
+      name: trimmedName,
+      description: description.trim(),
+      slug,
+      seo_title: finalSeoTitle,
+      is_active,
+      created_by: userId || null,
+    });
 
-  return {
-    success: true,
-    message: "Category created successfully",
-    category: category.toJSON(),
-  };
+    return {
+      success: true,
+      message: "Category created successfully",
+      category: category.toJSON(),
+    };
+  } catch (error) {
+    if (error.name === "SequelizeUniqueConstraintError") {
+      throw { code: "CATEGORY_EXISTS", message: "Category with this name or slug already exists" };
+    }
+    throw error;
+  }
 };
+
 
 export const getAllActiveCategories = async ({ limit, offset, search } = {}) => {
   const whereClause = { is_active: true };
@@ -75,7 +59,7 @@ export const getAllActiveCategories = async ({ limit, offset, search } = {}) => 
   const options = {
     where: whereClause,
     order: [['created_at', 'DESC']],
-    attributes: ['id', 'name', 'description', 'slug', 'seo_title', 'created_at']
+    attributes: ['id', 'name', 'description', 'slug', 'seo_title', 'created_by', 'created_at']
   };
 
   // Add pagination if provided
@@ -100,7 +84,7 @@ export const getAllActiveCategories = async ({ limit, offset, search } = {}) => 
 export const getAllCategories = async ({ includeInactive = false, limit, offset } = {}) => {
   const options = {
     order: [['created_at', 'DESC']],
-    attributes: ['id', 'name', 'description', 'slug', 'seo_title', 'is_active', 'created_at']
+    attributes: ['id', 'name', 'description', 'slug', 'seo_title', 'is_active', 'created_at', 'created_by']
   };
 
   if (!includeInactive) {
@@ -137,12 +121,12 @@ export const getCategoryBySlug = async ({ slug }) => {
     throw new Error("Slug is required and must be a string");
   }
 
-  const category = await ProductCategory.findOne({ 
-    where: { 
+  const category = await ProductCategory.findOne({
+    where: {
       slug: slug.trim(),
-      is_active: true // Only return active categories
+      is_active: true
     },
-    attributes: ['id', 'name', 'description', 'slug', 'seo_title']
+    attributes: ['id', 'name', 'description', 'slug', 'seo_title', 'created_by']
   });
 
   if (category) {
@@ -232,24 +216,25 @@ export const deleteCategory = async ({ id, soft = true }) => {
   if (soft) {
     // Soft delete - just mark as inactive
     await category.update({ is_active: false });
+    await Product.update(
+      { is_active: false },
+      { where: { category_id: id } }
+    );
+
     return {
       success: true,
       message: "Category deactivated successfully"
     };
-  } else {
-    // Hard delete - check for associated products first
-    const productCount = await Product.count({ where: { category_id: id } });
-
-    if (productCount > 0) {
-      throw new Error(`Cannot delete category. ${productCount} products are associated with this category`);
-    }
-
-    await category.destroy();
-    return {
-      success: true,
-      message: "Category deleted successfully"
-    };
   }
+  if (!soft) {
+    // Delete all products linked to this category first
+    await Product.destroy({ where: { category_id: id } });
+
+    // Then delete the category itself
+    await category.destroy();
+    return { success: true, message: "Category and its products deleted successfully" };
+  }
+
 };
 
 export const getCategoryById = async ({ id }) => {
