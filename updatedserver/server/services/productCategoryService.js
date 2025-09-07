@@ -214,16 +214,25 @@ export const deleteCategory = async ({ id, soft = true }) => {
   }
 
   if (soft) {
-    // Soft delete - just mark as inactive
-    await category.update({ is_active: false });
+    // First, fetch the current state of the category
+    const currentStatus = category.is_active;
+
+    // Toggle the value
+    const newStatus = !currentStatus;
+
+    // Update the category
+    await category.update({ is_active: newStatus });
+
+    // Update all associated products with the same toggle
     await Product.update(
-      { is_active: false },
+      { is_active: newStatus },
       { where: { category_id: id } }
     );
 
     return {
       success: true,
-      message: "Category deactivated successfully"
+      message: `Category ${newStatus ? "activated" : "deactivated"} successfully`,
+      category: { id: category.id, is_active: newStatus }
     };
   }
   if (!soft) {

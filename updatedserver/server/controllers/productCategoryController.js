@@ -16,7 +16,6 @@ export const getAllActiveCategoriesHandler = asyncHandler(async (req, res) => {
   res.json(new ApiResponse(200, result, "Active categories fetched successfully"));
 });
 
-
 export const getAllCategoriesHandler = asyncHandler(async (req, res) => {
   const { includeInactive, limit, offset } = req.query;
 
@@ -63,4 +62,3 @@ export const getCategoryByIdHandler = asyncHandler(async (req, res) => {
 
   res.json(new ApiResponse(200, result, result.message || "Category fetched successfully"));
 });
-

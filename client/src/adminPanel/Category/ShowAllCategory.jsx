@@ -10,53 +10,63 @@ const ShowAllCategories = () => {
   const [deleteConfirm, setDeleteConfirm] = useState(null);
 
   // Fetch categories from API
+  const token = localStorage.getItem("authToken");
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_API}/api/category`, {
-        method: 'GET',
+
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_API}/api/category/all`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        // ✅ categories are inside result.data.categories
+        const cats = result.data?.categories || [];
+        setCategories(Array.isArray(cats) ? cats : []);
+      } else {
+        setError(result.message || "Failed to fetch categories");
+      }
+    } catch (err) {
+      setError("Failed to load categories. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  // Delete category
+  const handleDelete = async (categoryId) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_API}/api/category/${categoryId}`, {
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
+          "Authorization": `Bearer ${token}`, // ✅ Missing before
         },
       });
 
       const data = await response.json();
 
       if (response.ok && data.success) {
-        setCategories(data.categories || data.data || []);
+        setSuccess('Category deleted successfully!');
+        setCategories((prev) => prev.filter(cat => cat.id !== categoryId));
+        setDeleteConfirm(null);
       } else {
-        setError(data.message || 'Failed to fetch categories');
+        setError(data.message || 'Failed to delete category');
       }
     } catch (err) {
-      setError('Failed to load categories. Please try again.');
-    } finally {
-      setLoading(false);
+      setError('Failed to delete category. Please try again.');
     }
   };
-
-  // Delete category
-const handleDelete = async (categoryId) => {
-  try {
-    const response = await fetch(`${import.meta.env.VITE_BACKEND_API}/api/category/${categoryId}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    const data = await response.json();
-
-    if (response.ok && data.success) {
-      setSuccess('Category deleted successfully!');
-      setCategories(categories.filter(cat => cat.id !== categoryId));
-      setDeleteConfirm(null);
-    } else {
-      setError(data.message || 'Failed to delete category');
-    }
-  } catch (err) {
-    setError('Failed to delete category. Please try again.');
-  }
-};
 
 
   // Navigation handler
@@ -75,11 +85,22 @@ const handleDelete = async (categoryId) => {
     }
   };
 
+  const handleToggle = (categoryId) => {
+    setCategories((prev) =>
+      prev.map((cat) =>
+        cat.id === categoryId ? { ...cat, is_active: !cat.is_active } : cat
+      )
+    );
+  };
+
+
   // Filter categories based on search term
-  const filteredCategories = categories.filter(category =>
-    category.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    category.description?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredCategories = Array.isArray(categories)
+    ? categories.filter(category =>
+      category.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      category.description?.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    : [];
 
   // Load categories on component mount
   useEffect(() => {
@@ -109,7 +130,7 @@ const handleDelete = async (categoryId) => {
             <div className="flex justify-between items-center">
               <h2 className="text-lg font-semibold text-gray-900">All Categories</h2>
               <Link
-                to = '/productCategory'
+                to='/productCategory'
                 // onClick={() => handleNavigation('add-category')}
                 className="inline-flex items-center px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors text-sm hover:cursor-pointer"
               >
@@ -222,6 +243,15 @@ const handleDelete = async (categoryId) => {
                           <td className="px-4 py-3 text-right text-sm">
                             <div className="flex justify-end space-x-2">
                               <button
+                                onClick={() => handleToggle(category.id)}
+                                className={`${category.is_active
+                                    ? "text-yellow-600 hover:text-yellow-800"
+                                    : "text-green-600 hover:text-green-800"
+                                  } text-sm font-medium`}
+                              >
+                                {category.is_active ? "Deactivate" : "Activate"}
+                              </button>
+                              <button
                                 onClick={() => console.log('Edit category:', category.id)}
                                 className="text-blue-600 hover:text-blue-900 text-sm font-medium hover:cursor-pointer"
                               >
@@ -282,7 +312,7 @@ const handleDelete = async (categoryId) => {
             <div className="mt-6 pt-4 border-t border-gray-200">
               <div className="flex justify-center space-x-3">
                 <Link
-                  to = '/admin'
+                  to='/admin'
                   onClick={() => handleNavigation('dashboard')}
                   className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors hover:cursor-pointer"
                 >
@@ -291,7 +321,7 @@ const handleDelete = async (categoryId) => {
                   </svg>
                   Dashboard
                 </Link>
-                
+
                 <button
                   onClick={() => fetchCategories()}
                   className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors hover:cursor-pointer"

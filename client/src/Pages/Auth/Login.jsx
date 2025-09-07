@@ -31,6 +31,7 @@ const LoginPage = () => {
       if (!res.ok) return alert(data.message || "Login failed");
 
       localStorage.setItem("authToken", data.data.token);
+      
       localStorage.setItem("user", JSON.stringify(data.data.user));
       alert("Login successful!");
       window.location.href = "/dashboard";
