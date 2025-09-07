@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../../slices/authSlice"; // adjust path
 import AlertBox from "../../ui/AlertBox";
 
 const API_BASE = import.meta.env.VITE_BACKEND_API || "http://localhost:5001";
@@ -9,6 +11,8 @@ const LoginOTPPage = () => {
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({ show: false, type: "", message: "" });
+
+  const dispatch = useDispatch(); // ✅ hook for redux
 
   const showAlert = (type, message) => {
     setAlert({ show: true, type, message });
@@ -56,11 +60,10 @@ const LoginOTPPage = () => {
 
       if (!res.ok) return showAlert("error", data.message || "Invalid OTP");
 
-      localStorage.setItem("authToken", data.data.token);
-      localStorage.setItem("user", JSON.stringify(data.data.user));
-      showAlert("success", "OTP login successful!");
+      // ✅ Use Redux instead of direct localStorage
+      dispatch(loginSuccess({ token: data.data.token, user: data.data.user }));
 
-      // SPA navigation fallback if no router
+      showAlert("success", "OTP login successful!");
       setTimeout(() => (window.location.href = "/dashboard"), 1000);
     } catch (err) {
       console.error(err);
@@ -94,7 +97,9 @@ const LoginOTPPage = () => {
               onClick={handleSendOtp}
               disabled={loading}
               className={`w-full py-3 font-semibold rounded-lg shadow transition-all duration-200 ${
-                loading ? "bg-gray-400 cursor-not-allowed text-white" : "bg-blue-500 text-white hover:bg-blue-600"
+                loading
+                  ? "bg-gray-400 cursor-not-allowed text-white"
+                  : "bg-blue-500 text-white hover:bg-blue-600"
               }`}
             >
               {loading ? "Sending OTP..." : "Send OTP"}
@@ -114,7 +119,9 @@ const LoginOTPPage = () => {
               onClick={handleVerifyOtp}
               disabled={loading}
               className={`w-full py-3 font-semibold rounded-lg shadow transition-all duration-200 ${
-                loading ? "bg-gray-400 cursor-not-allowed text-white" : "bg-blue-500 text-white hover:bg-blue-600"
+                loading
+                  ? "bg-gray-400 cursor-not-allowed text-white"
+                  : "bg-blue-500 text-white hover:bg-blue-600"
               }`}
             >
               {loading ? "Verifying OTP..." : "Verify OTP"}

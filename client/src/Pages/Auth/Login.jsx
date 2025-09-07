@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../../slices/authSlice"; // adjust path
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
 
@@ -10,6 +12,8 @@ const API_BASE = import.meta.env.VITE_BACKEND_API || "http://localhost:5001";
 const LoginPage = () => {
   const [formData, setFormData] = useState({ identifier: "", password: "" });
   const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,9 +34,7 @@ const LoginPage = () => {
       setLoading(false);
       if (!res.ok) return alert(data.message || "Login failed");
 
-      localStorage.setItem("authToken", data.data.token);
-      
-      localStorage.setItem("user", JSON.stringify(data.data.user));
+       dispatch(loginSuccess({ token: data.data.token, user: data.data.user }));
       alert("Login successful!");
       window.location.href = "/dashboard";
     } catch (err) {
