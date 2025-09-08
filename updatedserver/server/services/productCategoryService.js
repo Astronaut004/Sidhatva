@@ -8,7 +8,13 @@ import { Op } from 'sequelize';
 // services --> getallCategory, getCategoryBySlug, createCategory, updateCategory, deleteCategory, changeStateCategory
 
 
-export const createCategory = async ({ name, description = "", seo_title, is_active = true, userId }) => {
+export const createCategory = async ({ 
+  name, 
+  description = "", 
+  seo_title, 
+  is_active = true, 
+  userId 
+}) => {
   if (!name || typeof name !== "string" || name.trim().length === 0) {
     throw { code: "INVALID_NAME", message: "Name is required and must be a non-empty string" };
   }
@@ -21,28 +27,22 @@ export const createCategory = async ({ name, description = "", seo_title, is_act
   const slug = generateSlug(trimmedName);
   const finalSeoTitle = seo_title || generateSeoTitle(trimmedName, description);
 
-  try {
-    const category = await ProductCategory.create({
-      name: trimmedName,
-      description: description.trim(),
-      slug,
-      seo_title: finalSeoTitle,
-      is_active,
-      created_by: userId || null,
-    });
+  const category = await ProductCategory.create({
+    name: trimmedName,
+    description: description.trim(),
+    slug,
+    seo_title: finalSeoTitle,
+    is_active,
+    created_by: userId || null,
+  });
 
-    return {
-      success: true,
-      message: "Category created successfully",
-      category: category.toJSON(),
-    };
-  } catch (error) {
-    if (error.name === "SequelizeUniqueConstraintError") {
-      throw { code: "CATEGORY_EXISTS", message: "Category with this name or slug already exists" };
-    }
-    throw error;
-  }
+  return {
+    success: true,
+    message: "Category created successfully",
+    category: category.toJSON(),
+  };
 };
+
 
 
 export const getAllActiveCategories = async ({ limit, offset, search } = {}) => {

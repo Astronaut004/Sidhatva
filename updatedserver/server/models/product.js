@@ -45,23 +45,27 @@ export default (sequelize) => {
       sub_category_id: {
         type: DataTypes.BIGINT,
         references: { model: "sub_categories", key: "id" },
-        onDelete: "CASCADE",
+        onDelete: "SET NULL",
         allowNull: true,
       },
+
       brand_id: {
         type: DataTypes.BIGINT,
         references: { model: "brands", key: "id" },
         onDelete: "SET NULL",
+        allowNull: true,
       },
       material_id: {
         type: DataTypes.BIGINT,
         references: { model: "materials", key: "id" },
         onDelete: "SET NULL",
+        allowNull: true,
       },
       color_id: {
         type: DataTypes.BIGINT,
         references: { model: "colors", key: "id" },
         onDelete: "SET NULL",
+        allowNull: true,
       },
       type: {
         type: DataTypes.ENUM("simple", "variable", "grouped", "external"),
@@ -188,7 +192,7 @@ export default (sequelize) => {
 
     // SubCategory is optional
     if (models.SubCategory) {
-      Product.belongsTo(models.productSubCategory, {
+      Product.belongsTo(models.SubCategory, {
         foreignKey: "sub_category_id",
         allowNull: true,
       });
