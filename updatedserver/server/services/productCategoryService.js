@@ -12,7 +12,7 @@ export const createCategory = async ({
   name, 
   description = "", 
   seo_title, 
-  is_active = true, 
+  is_active = true,
   userId 
 }) => {
   if (!name || typeof name !== "string" || name.trim().length === 0) {
