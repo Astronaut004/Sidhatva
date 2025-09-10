@@ -23,7 +23,7 @@ const ItemDetail = lazy(() => import('./Pages/ItemDetail'));
 const AdminHome = lazy(() => import('./adminPanel/AdminHome'));
 const ProductCategory = lazy(() => import('./adminPanel/Category/ProductCategory'));
 const ShowAllCategories = lazy(() => import('./adminPanel/Category/ShowAllCategory'));
-
+const ProductCreate = lazy(() => import('./adminPanel/Product/ProductCreate')); 
 const App = () => {
   return (
     <Router>
@@ -46,6 +46,7 @@ const App = () => {
           <Route path='/admin' element={<AdminHome/>} />
           <Route path='/productCategory' element={<ProductCategory/>} />
           <Route path='/Show-Categories' element={<ShowAllCategories/>} />
+          <Route path='/productCreation' element={<ProductCreate/>} />
           <Route path="*" element={<div>404 Page Not Found</div>} />
         </Routes>
         <Footer/>
