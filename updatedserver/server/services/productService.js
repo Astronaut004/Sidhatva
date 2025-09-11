@@ -35,23 +35,6 @@ export const createProduct = async (data) => {
     slugAttempts++;
   } while (slugExists);
 
-
-  // Parse dimensions properly
-  // let dimensions = null;
-  // if (data.dimensions) {
-  //   if (typeof data.dimensions === 'string') {
-  //     const parts = data.dimensions.split('x');
-  //     if (parts.length === 3) {
-  //       dimensions = {
-  //         length: parseFloat(parts[0]),
-  //         width: parseFloat(parts[1]),
-  //         height: parseFloat(parts[2])
-  //       };
-  //     }
-  //   } else if (typeof data.dimensions === 'object') {
-  //     dimensions = data.dimensions;
-  //   }
-  // }
   let dimensions = null;
 
   if (data.dimensions && typeof data.dimensions === 'object') {
@@ -105,4 +88,235 @@ export const createProduct = async (data) => {
   };
 
   return await Product.create(productData);
+};
+
+export const getAllActiveProducts = async ({
+  limit = 10,
+  offset = 0,
+  search = "",
+  is_active = true,
+} = {}) => {
+  const whereClause = {};
+
+  // Filter by active flag
+  if (typeof is_active === "boolean") {
+    whereClause.is_active = is_active;
+  }
+
+  // Search by name or description
+  if (search && search.trim()) {
+    whereClause[Op.or] = [
+      { name: { [Op.iLike]: `%${search.trim()}%` } },
+      { description: { [Op.iLike]: `%${search.trim()}%` } },
+    ];
+  }
+
+  const { rows, count } = await Product.findAndCountAll({
+    where: whereClause,
+    limit,
+    offset,
+    order: [["created_at", "DESC"]],
+  });
+
+  return {
+    total: count,
+    limit,
+    offset,
+    products: rows,
+  };
+};
+
+export const getAllProducts = async ({
+  limit = 10,
+  offset = 0,
+  search = "",
+} = {}) => {
+  const whereClause = {};
+
+  // Search by name or description
+  if (search && search.trim()) {
+    whereClause[Op.or] = [
+      { name: { [Op.iLike]: `%${search.trim()}%` } },
+      { description: { [Op.iLike]: `%${search.trim()}%` } },
+    ];
+  }
+
+  const { rows, count } = await Product.findAndCountAll({
+    where: whereClause,
+    limit,
+    offset,
+    order: [["created_at", "DESC"]],
+  });
+
+  return {
+    total: count,
+    limit,
+    offset,
+    products: rows,
+  };
+};
+
+
+export const getProductsByCategory = async ({
+  categoryId,
+  limit = 10,
+  offset = 0,
+  search = "",
+  is_active = true,
+}) => {
+  if (!categoryId) {
+    throw new Error("Category ID is required");
+  }
+
+  const whereClause = {
+    category_id: categoryId,
+  };
+
+  // Optional active filter
+  if (typeof is_active === "boolean") {
+    whereClause.is_active = is_active;
+  }
+
+  // Optional search
+  if (search && search.trim()) {
+    whereClause[Op.or] = [
+      { name: { [Op.iLike]: `%${search.trim()}%` } },
+      { description: { [Op.iLike]: `%${search.trim()}%` } },
+    ];
+  }
+
+  const { rows, count } = await Product.findAndCountAll({
+    where: whereClause,
+    limit,
+    offset,
+    order: [["created_at", "DESC"]],
+  });
+
+  return {
+    total: count,
+    limit,
+    offset,
+    products: rows,
+  };
+};
+
+export const getProductBySlug = async (slug) => {
+  if (!slug) {
+    throw new Error("Product slug is required");
+  }
+
+  const product = await Product.findOne({
+    where: { slug },
+  });
+
+  if (!product) {
+    throw new Error("Product not found");
+  }
+
+  return product;
+};
+
+
+export const updateProduct = async ({ id, data }) => {
+  if (!id) throw new Error("Product ID is required");
+
+  const product = await Product.findByPk(id);
+  if (!product) throw new Error("Product not found");
+
+  // Update slug if name changes
+  if (data.name && data.name !== product.name) {
+    let slug = generateSlug(data.name);
+    let slugExists;
+    let attempts = 0;
+
+    do {
+      if (attempts > 5) throw new Error("Failed to generate unique slug");
+      slugExists = await Product.findOne({
+        where: { slug, id: { [db.Sequelize.Op.ne]: id } },
+      });
+      if (slugExists) slug = `${slug}-${Math.floor(1000 + Math.random() * 9000)}`;
+      attempts++;
+    } while (slugExists);
+
+    data.slug = slug;
+  }
+
+  // Update only allowed fields (ignore barcode)
+  const allowedFields = [
+    "name",
+    "slug",
+    "description",
+    "short_description",
+    "category_id",
+    "sub_category_id",
+    "brand_id",
+    "material_id",
+    "color_id",
+    "type",
+    "status",
+    "is_active",
+    "visibility",
+    "featured",
+    "weight",
+    "dimensions",
+    "shipping_required",
+    "tax_status",
+    "manage_stock",
+    "stock_status",
+    "backorders_allowed",
+    "sold_individually",
+    "unit_factor",
+    "unit_code",
+    "cost_price",
+    "selling_price",
+    "discount_amount",
+    "discount_percent",
+    "reviews_allowed",
+    "average_rating",
+    "rating_count",
+    "total_sales",
+    "seo_title",
+    "seo_description",
+  ];
+
+  const updateData = {};
+  allowedFields.forEach((key) => {
+    if (data[key] !== undefined) updateData[key] = data[key];
+  });
+
+  updateData.updated_at = new Date();
+
+  await product.update(updateData);
+
+  return product;
+};
+
+export const deleteProduct = async ({ id, soft = true }) => {
+  if (!id) {
+    throw new Error("Product ID is required");
+  }
+
+  const product = await Product.findByPk(id);
+
+  if (!product) {
+    throw new Error("Product not found");
+  }
+
+  if (soft) {
+    // Toggle the is_active flag
+    const newStatus = !product.is_active;
+    await product.update({ is_active: newStatus });
+
+    return {
+      success: true,
+      message: `Product ${newStatus ? "activated" : "deactivated"} successfully`,
+      product: { id: product.id, is_active: newStatus },
+    };
+  }
+  await product.destroy();
+
+  return {
+    success: true,
+    message: "Product deleted permanently",
+  };
 };
