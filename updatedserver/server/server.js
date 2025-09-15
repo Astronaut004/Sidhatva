@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended:  true }));
 
 // --- API Routes ---
 app.use('/api', mainRouter);
-
+app.use("/uploads", express.static("uploads"));
 // --- Global Error Handler ---
 app.use(errorHandler);
 
