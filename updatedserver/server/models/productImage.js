@@ -109,20 +109,6 @@ export default (sequelize, DataTypes) => {
     }
   });
 
-    ProductImage.beforeUpdate(async (image, options) => {
-    if (image.is_primary) {
-      const where = image.variant_id
-        ? { product_id: image.product_id, variant_id: image.variant_id, is_primary: true }
-        : { product_id: image.product_id, variant_id: null, is_primary: true };
-
-      const existingPrimary = await ProductImage.findOne({ where });
-
-      if (existingPrimary && existingPrimary.id !== image.id) {
-        throw new Error("A primary image already exists for this product/variant");
-      }
-    }
-  });
-
 
   return ProductImage;
 };
