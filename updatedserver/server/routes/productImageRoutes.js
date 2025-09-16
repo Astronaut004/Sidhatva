@@ -1,7 +1,8 @@
 import express from "express";
 import { 
   createProductImageHandler,
-  getProductImageHandler
+  getProductImageHandler,
+  updateProductImageHandler
 } from "../controllers/productImageController.js";
 
 import { protect } from "../middleware/authMiddleware.js";
@@ -14,5 +15,7 @@ router.post("/product-images", protect, authorize("admin", "vendor"), createProd
 
 // Get all images for a product
 router.get("/product-images/:product_id", getProductImageHandler);
+
+router.patch("/product-images/:product_id/image/:image_id", protect, authorize("admin", "vendor"), updateProductImageHandler);
 
 export default router;

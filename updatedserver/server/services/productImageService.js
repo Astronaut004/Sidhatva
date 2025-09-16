@@ -36,26 +36,6 @@ export const createImage = async (data, transaction) => {
   return await ProductImage.create(imageData, { transaction });
 };
 
-
-// export const createImage = async (data, transaction = null) => {
-//   const imageData = {
-//     product_id: parseInt(data.product_id),
-//     variant_id: data.variant_id ? parseInt(data.variant_id) : null,
-//     image_url: data.image_url,
-//     alt_text: data.alt_text || null,
-//     is_primary: data.is_primary ?? false,
-//     is_active: data.is_active ?? true,
-//     image_type: data.image_type || null,
-//     image_size: data.image_size ? parseInt(data.image_size) : null,
-//     position: data.position ? parseInt(data.position) : 0,
-//     created_by: data.created_by ? parseInt(data.created_by) : null,
-//   };
-
-//   return await ProductImage.create(imageData, { transaction });
-// };
-
-
-// get all products 
 export const getImagesByProductId = async (product_id) => {
   if (!product_id || (typeof product_id !== 'string' && typeof product_id !== 'number')) {
     throw new Error('Valid product_id is required');
@@ -64,5 +44,20 @@ export const getImagesByProductId = async (product_id) => {
     where: { product_id, is_active: true },
     order: [['position', 'ASC']],
   });
+};
+
+
+export const updateImage = async (product_id, id, data, transaction) => {
+  const image = await ProductImage.findOne({ where: { product_id, id } });
+  if (!image) {
+    throw new ApiError(404, "Image not found");
+  }
+
+  if ("is_primary" in data) {
+    throw new ApiError(400, "Cannot update 'is_primary' from this route");
+  }
+
+  await image.update(data, { transaction });
+  return image;
 };
 
