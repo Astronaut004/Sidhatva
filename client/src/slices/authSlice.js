@@ -1,4 +1,8 @@
+// src/slices/authSlice.js
 import { createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+
+const API_BASE = import.meta.env.VITE_BACKEND_API || "http://localhost:5001";
 
 const initialState = {
   user: JSON.parse(localStorage.getItem("user")) || null,
@@ -27,4 +31,30 @@ const authSlice = createSlice({
 });
 
 export const { loginSuccess, logout } = authSlice.actions;
+
+// 🔹 API calls using axios
+export const loginApi = async (formData) => {
+  return axios.post(`${API_BASE}/api/auth/login`, formData);
+};
+
+export const sendOtpApi = async (identifier) => {
+  return axios.post(`${API_BASE}/api/auth/send-otp`, {
+    identifier,
+    purpose: "login",
+  });
+};
+
+export const verifyOtpApi = async ({ identifier, otp }) => {
+  return axios.post(`${API_BASE}/api/auth/verify-otp`, {
+    identifier,
+    otp,
+    purpose: "login",
+    role: "user",
+  });
+};
+
+export const registerApi = async (payload) => {
+  return axios.post(`${API_BASE}/api/auth/register`, payload);
+};
+
 export default authSlice.reducer;
