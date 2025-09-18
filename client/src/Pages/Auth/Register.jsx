@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import AlertBox from "../../ui/AlertBox";
 import { useDispatch } from "react-redux";
-import { loginSuccess } from "../../slices/authSlice";
+import { registerApi , loginSuccess } from "../../slices/authSlice";
 
 
 const Register = () => {
+  const dispatch = useDispatch();
   const [identifier, setIdentifier] = useState(""); // Single field for email/phone
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -15,80 +16,23 @@ const Register = () => {
     setTimeout(() => setAlert({ show: false, type: "", message: "" }), 3000);
   };
 
-  const authHandle = async (e) => {
-    e.preventDefault();
+const authHandle = async (e) => {
+  e.preventDefault();
 
-    if (!identifier) {
-      showAlert("error", "Please enter email or phone number");
-      return;
-    }
+  try {
+    setLoading(true);
+    const { data } = await registerApi({ identifier, password });
 
-    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier);
-    const isPhone = /^(\d{10}|\d{12,13})$/.test(identifier); // 10 or 12-13 digits
+    dispatch(loginSuccess({ user: data.data.user, token: data.data.token }));
+    showAlert("success", "🎉 Registration successful!");
+    setTimeout(() => (window.location.href = "/dashboard"), 2000);
+  } catch (err) {
+    showAlert("error", err.response?.data?.message || "Registration failed");
+  } finally {
+    setLoading(false);
+  }
+};
 
-    if (!isEmail && !isPhone) {
-      showAlert("error", "Please enter a valid email or phone number");
-      return;
-    }
-
-    // ✅ Password Validation
-    if (password.length < 8) {
-      showAlert("error", "Password must be at least 8 characters long");
-      return;
-    }
-    if (!/[A-Z]/.test(password)) {
-      showAlert("error", "Password must contain at least one uppercase letter");
-      return;
-    }
-    if (!/[a-z]/.test(password)) {
-      showAlert("error", "Password must contain at least one lowercase letter");
-      return;
-    }
-    if (!/[0-9]/.test(password)) {
-      showAlert("error", "Password must contain at least one number");
-      return;
-    }
-    if (!/[@$!%*?&]/.test(password)) {
-      showAlert("error", "Password must contain at least one special character (@$!%*?&)");
-      return;
-    }
-
-    const payload = { identifier, password };
-
-    try {
-      setLoading(true);
-      const API_BASE = import.meta.env.VITE_BACKEND_API || "http://localhost:5001";
-      console.log("API_BASE:", API_BASE);
-      console.log("Payload being sent:", payload);
-
-      const res = await fetch(`${API_BASE}/api/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        showAlert("error", data.message || "Registration failed");
-        return;
-      }
-      dispatch(
-        loginSuccess({ user: data.data.user, token: data.data.token })
-      );
-
-      showAlert("success", "🎉 Registration successful!");
-      setTimeout(() => {
-        window.location.href = "/dashboard";   
-      }, 2000);
-
-    } catch (err) {
-      console.error("Register error:", err);
-      showAlert("error", "Something went wrong, please try again later.");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-sky-50 flex items-center justify-center p-4">
