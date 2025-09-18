@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { loginSuccess } from "../../slices/authSlice"; // adjust path
+import {sendOtpApi,verifyOtpApi, loginSuccess } from "../../slices/authSlice"; // adjust path
 import AlertBox from "../../ui/AlertBox";
 
 const API_BASE = import.meta.env.VITE_BACKEND_API || "http://localhost:5001";
@@ -19,58 +19,37 @@ const LoginOTPPage = () => {
     setTimeout(() => setAlert({ show: false, type: "", message: "" }), 3000);
   };
 
-  // Send OTP
-  const handleSendOtp = async () => {
-    if (!identifier.trim()) return showAlert("error", "Enter email or phone number");
+const handleSendOtp = async () => {
+  if (!identifier.trim()) return showAlert("error", "Enter email or phone");
 
-    try {
-      setLoading(true);
-      const res = await fetch(`${API_BASE}/api/auth/send-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ identifier, purpose: "login" }),
-      });
-      const data = await res.json();
-      setLoading(false);
+  try {
+    setLoading(true);
+    await sendOtpApi(identifier);
+    setOtpSent(true);
+    showAlert("success", "OTP sent successfully!");
+  } catch (err) {
+    showAlert("error", err.response?.data?.message || "Failed to send OTP");
+  } finally {
+    setLoading(false);
+  }
+};
 
-      if (!res.ok) return showAlert("error", data.message || "Failed to send OTP");
+const handleVerifyOtp = async () => {
+  if (!otp.trim()) return showAlert("error", "Enter OTP");
 
-      setOtpSent(true);
-      showAlert("success", "OTP sent successfully!");
-    } catch (err) {
-      console.error(err);
-      setLoading(false);
-      showAlert("error", "Something went wrong. Try again.");
-    }
-  };
+  try {
+    setLoading(true);
+    const { data } = await verifyOtpApi({ identifier, otp });
 
-  // Verify OTP
-  const handleVerifyOtp = async () => {
-    if (!otp.trim()) return showAlert("error", "Enter OTP");
-
-    try {
-      setLoading(true);
-      const res = await fetch(`${API_BASE}/api/auth/verify-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ identifier, otp, purpose: "login", role: "user" }),
-      });
-      const data = await res.json();
-      setLoading(false);
-
-      if (!res.ok) return showAlert("error", data.message || "Invalid OTP");
-
-      // ✅ Use Redux instead of direct localStorage
-      dispatch(loginSuccess({ token: data.data.token, user: data.data.user }));
-
-      showAlert("success", "OTP login successful!");
-      setTimeout(() => (window.location.href = "/dashboard"), 1000);
-    } catch (err) {
-      console.error(err);
-      setLoading(false);
-      showAlert("error", "Something went wrong. Try again.");
-    }
-  };
+    dispatch(loginSuccess({ token: data.data.token, user: data.data.user }));
+    showAlert("success", "OTP login successful!");
+    setTimeout(() => (window.location.href = "/dashboard"), 1000);
+  } catch (err) {
+    showAlert("error", err.response?.data?.message || "Invalid OTP");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen bg-sky-50 flex items-center justify-center p-4">
