@@ -1,22 +1,24 @@
 import asyncHandler from '../utils/asyncHandler.js';
-import * as cartService from '../services/cartService.js';
 import ApiResponse from '../utils/apiResponse.js';
+import { createCart } from '../services/cartService.js';
 
-const getCart = asyncHandler(async (req, res) => {
-  const userId = req.user.id;
-  const cart = await cartService.getCart(userId);
-  res.status(200).json(new ApiResponse(200, cart, "Cart retrieved successfully."));
-});
 
-const addItemToCart = asyncHandler(async (req, res) => {
-  const userId = req.user.id;
-  const { productId, quantity } = req.body;
-  if (!productId || !quantity || quantity < 1) {
-    res.status(400);
-    throw new Error("Invalid product ID or quantity.");
+export const createCartHandler = asyncHandler(async (req, res) => {
+
+  const userId = req.user ? req.user.id : null;
+  const sessionId = req.guestId || null;
+  const createdBy = userId || null;
+
+  const cart = await createCart({ userId, sessionId, createdBy });
+
+  if (!userId) {
+    res.cookie('guestId', cart.session_id, {
+      httpOnly: true,
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+    });
   }
-  const updatedCart = await cartService.addItemToCart(userId, { productId, quantity });
-  res.status(200).json(new ApiResponse(200, updatedCart, "Item added to cart successfully."));
-});
 
-export default { getCart, addItemToCart };
+  res.status(200).json(new ApiResponse(201, cart, "Cart created"));
+});
