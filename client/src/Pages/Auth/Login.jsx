@@ -1,13 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { loginSuccess } from "../../slices/authSlice"; // adjust path
+import { loginSuccess, loginApi} from "../../slices/authSlice"; // adjust path
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
 
-// If your component file is Pages/Auth/LoginOTPPage.jsx
-
-
-const API_BASE = import.meta.env.VITE_BACKEND_API || "http://localhost:5001";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ identifier: "", password: "" });
@@ -15,9 +11,8 @@ const LoginPage = () => {
 
   const dispatch = useDispatch();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleLogin = async (e) => {
@@ -25,22 +20,15 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      const res = await fetch(`${API_BASE}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      const data = await res.json();
-      setLoading(false);
-      if (!res.ok) return alert(data.message || "Login failed");
+      const { data } = await loginApi(formData);
 
-       dispatch(loginSuccess({ token: data.data.token, user: data.data.user }));
+      dispatch(loginSuccess({ token: data.data.token, user: data.data.user }));
       alert("Login successful!");
       window.location.href = "/dashboard";
     } catch (err) {
+      alert(err.response?.data?.message || "Login failed");
+    } finally {
       setLoading(false);
-      console.error(err);
-      alert("Something went wrong");
     }
   };
 
