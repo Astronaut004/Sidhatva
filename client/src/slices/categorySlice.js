@@ -1,180 +1,178 @@
-// src/slices/categorySlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Base API URL (adjust based on your backend server)
-const API_URL = "http://localhost:5001/api/category";
+const API_URL = "http://localhost:5001/api";
 
-// ✅ Async Thunks
+// 🔹 Create Category
+// categorySlice.js
 export const createCategory = createAsyncThunk(
-  "categories/create",
+  "category/createCategory",
   async ({ categoryData, token }, { rejectWithValue }) => {
     try {
-      const res = await axios.post(`${API_URL}/create-category`, categoryData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      return res.data;
+      const response = await axios.post(
+        "http://localhost:5001/api/category/create-category",
+        categoryData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
+      return rejectWithValue(error.response.data);
     }
   }
 );
 
-export const fetchActiveCategories = createAsyncThunk(
-  "categories/fetchActive",
-  async ({ token, limit, offset, search }, { rejectWithValue }) => {
+
+// 🔹 Get Active Categories
+export const getActiveCategories = createAsyncThunk(
+  "category/getActive",
+  async ({ limit, offset, search } = {}, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`${API_URL}/active`, {
-        params: { limit, offset, search },
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      return res.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
+      let url = `${API_URL}/categories/active`;
+      const params = new URLSearchParams();
+      if (limit) params.append("limit", limit);
+      if (offset) params.append("offset", offset);
+      if (search) params.append("search", search);
+
+      if (params.toString()) url += `?${params.toString()}`;
+
+      const { data } = await axios.get(url);
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
     }
   }
 );
 
-export const fetchAllCategories = createAsyncThunk(
-  "categories/fetchAll",
-  async ({ token, includeInactive, limit, offset }, { rejectWithValue }) => {
+// 🔹 Get All Categories
+export const getAllCategories = createAsyncThunk(
+  "category/getAll",
+  async ({ includeInactive, limit, offset } = {}, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`${API_URL}/all`, {
-        params: { includeInactive, limit, offset },
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      return res.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
+      let url = `${API_URL}/category/all`;
+      const params = new URLSearchParams();
+      if (includeInactive) params.append("includeInactive", includeInactive);
+      if (limit) params.append("limit", limit);
+      if (offset) params.append("offset", offset);
+
+      if (params.toString()) url += `?${params.toString()}`;
+
+      const { data } = await axios.get(url);
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
     }
   }
 );
 
-export const fetchCategoryBySlug = createAsyncThunk(
-  "categories/fetchBySlug",
+// 🔹 Get Category by Slug
+export const getCategoryBySlug = createAsyncThunk(
+  "category/getBySlug",
   async (slug, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`${API_URL}/slug/${slug}`);
-      return res.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
+      const { data } = await axios.get(`${API_URL}/category/slug/${slug}`);
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
     }
   }
 );
 
-export const fetchCategoryById = createAsyncThunk(
-  "categories/fetchById",
-  async ({ id, token }, { rejectWithValue }) => {
-    try {
-      const res = await axios.get(`${API_URL}/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      return res.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
-    }
-  }
-);
-
+// 🔹 Update Category
 export const updateCategory = createAsyncThunk(
-  "categories/update",
+  "category/updateCategory",
   async ({ id, categoryData, token }, { rejectWithValue }) => {
     try {
-      const res = await axios.put(`${API_URL}/${id}`, categoryData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      return res.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.put(
+        `${API_URL}/category/${id}`,
+        categoryData,
+        config
+      );
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
     }
   }
 );
 
+// 🔹 Delete Category
 export const deleteCategory = createAsyncThunk(
-  "categories/delete",
-  async ({ id, token, soft = true }, { rejectWithValue }) => {
+  "category/deleteCategory",
+  async ({ id, soft = true, token }, { rejectWithValue }) => {
     try {
-      const res = await axios.delete(`${API_URL}/${id}`, {
-        params: { soft },
+      const config = {
         headers: { Authorization: `Bearer ${token}` },
-      });
-      return res.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
+      };
+      const url = `${API_URL}/category/${id}${soft ? "" : "?soft=false"}`;
+      const { data } = await axios.delete(url, config);
+      return { id, ...data };
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
     }
   }
 );
 
-// ✅ Slice
+// 🔹 Slice
 const categorySlice = createSlice({
-  name: "categories",
+  name: "category",
   initialState: {
     categories: [],
-    category: null,
+    activeCategories: [],
+    currentCategory: null,
     loading: false,
     error: null,
-    success: null,
   },
-  reducers: {
-    clearMessages: (state) => {
-      state.error = null;
-      state.success = null;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
-      // create
+      // Create
       .addCase(createCategory.pending, (state) => {
         state.loading = true;
-        state.error = null;
       })
       .addCase(createCategory.fulfilled, (state, action) => {
         state.loading = false;
-        state.success = action.payload.message;
-        state.categories.push(action.payload.category);
+        state.categories.push(action.payload);
       })
       .addCase(createCategory.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload?.message || "Failed to create category";
+        state.error = action.payload;
       })
-
-      // fetch active
-      .addCase(fetchActiveCategories.fulfilled, (state, action) => {
-        state.categories = action.payload.categories;
+      // Get Active
+      .addCase(getActiveCategories.fulfilled, (state, action) => {
+        state.activeCategories = action.payload;
       })
-
-      // fetch all
-      .addCase(fetchAllCategories.fulfilled, (state, action) => {
-        state.categories = action.payload.categories;
+      // Get All
+      .addCase(getAllCategories.fulfilled, (state, action) => {
+        state.categories = action.payload;
       })
-
-      // fetch by slug
-      .addCase(fetchCategoryBySlug.fulfilled, (state, action) => {
-        state.category = action.payload.category;
+      // Get by Slug
+      .addCase(getCategoryBySlug.fulfilled, (state, action) => {
+        state.currentCategory = action.payload;
       })
-
-      // fetch by id
-      .addCase(fetchCategoryById.fulfilled, (state, action) => {
-        state.category = action.payload.category;
-      })
-
-      // update
+      // Update
       .addCase(updateCategory.fulfilled, (state, action) => {
-        state.success = action.payload.message;
-        state.categories = state.categories.map((cat) =>
-          cat.id === action.payload.category.id ? action.payload.category : cat
+        const idx = state.categories.findIndex(
+          (c) => c.id === action.payload.id
         );
+        if (idx !== -1) state.categories[idx] = action.payload;
       })
-
-      // delete
+      // Delete
       .addCase(deleteCategory.fulfilled, (state, action) => {
-        state.success = action.payload.message;
         state.categories = state.categories.filter(
-          (cat) => cat.id !== action.meta.arg.id
+          (c) => c.id !== action.payload.id
         );
       });
   },
 });
 
-export const { clearMessages } = categorySlice.actions;
 export default categorySlice.reducer;
