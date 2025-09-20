@@ -23,16 +23,21 @@ const CreateCategory = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+const handleSubmit = (e) => {
   e.preventDefault();
+
   const categoryData = {
-    name,
-    description,
-    seo_title: name.toLowerCase().replace(/\s+/g, "-"),
-    is_active: true
+    name: formData.name,
+    description: formData.description,
+    seo_title: formData.seo_title || 
+      formData.name.toLowerCase().replace(/\s+/g, "-") + "-" + Date.now(),
+    is_active: formData.is_active,
   };
+
   dispatch(createCategory({ categoryData, token }));
 };
+
+
 
 
   return (
