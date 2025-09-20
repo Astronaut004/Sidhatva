@@ -1,4 +1,4 @@
-import { createImage, getImagesByProductId, updateImage } from "../services/productImageService.js";
+import { createImage, getImagesByProductId, updateImage, updatePrimaryImage, deleteImage } from "../services/productImageService.js";
 import ApiResponse from "../utils/apiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import { upload } from "../middleware/upload.js";
@@ -98,9 +98,9 @@ export const updateProductImageHandler = [
     if (!file) {
       return res.status(400).json(new ApiResponse(400, null, "Image is required"));
     }
-    if (file.size > MAX_SIZE) {
-      throw new ApiError(400, "Image size should not exceed 100 KB");
-    }
+    // if (file.size > MAX_SIZE) {
+    //   return res.status(400).json(new ApiResponse(400, null, "Image 100 KB"));
+    // }
 
     let imageData = {
       alt_text: req.body.alt_text,
@@ -130,3 +130,35 @@ export const updateProductImageHandler = [
       .json(new ApiResponse(200, updatedImage, "Image updated successfully"));
   }),
 ];
+
+export const updatePrimaryImageHandler = asyncHandler(async (req, res) => {
+  const { product_id, image_id } = req.params;
+
+  // Early validation
+  if (!product_id || !image_id) {
+    return res.status(400).json(new ApiResponse(400, null, "Product ID and Image ID are required"));
+  }
+
+  // Update primary image
+  const updatedImage = await updatePrimaryImage(product_id, image_id);
+
+  res.status(200).json(new ApiResponse(
+    200,
+    updatedImage,
+    "Primary image updated successfully"
+  ));
+});
+
+
+export const deleteProductImageHandler = asyncHandler(async (req, res) => {
+  const { image_id } = req.params;
+  const soft = req.query.soft !== "false"; // treat anything other than "false" as true
+
+  if (!image_id) {
+    return res.status(400).json(new ApiResponse(400, null, "Image ID is required"));
+  }
+
+  const result = await deleteImage({ image_id, soft });
+
+  res.status(200).json(new ApiResponse(200, result, result.message));
+});

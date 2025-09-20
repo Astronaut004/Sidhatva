@@ -61,3 +61,64 @@ export const updateImage = async (product_id, id, data, transaction) => {
   return image;
 };
 
+export const updatePrimaryImage = async (product_id, image_id, transaction = null) => {
+  if (!product_id || (typeof product_id !== 'string' && typeof product_id !== 'number')) {
+    throw new Error('Valid product_id is required');
+  }
+
+  // Find current primary image for the product
+  const currentPrimary = await ProductImage.findOne({
+    where: { product_id, is_primary: true },
+    transaction,
+  });
+
+  // Find the image we want to set as primary
+  const newPrimary = await ProductImage.findOne({
+    where: { id: image_id, product_id },
+    transaction,
+  });
+
+  if (!newPrimary) {
+    throw new Error('Image not found');
+  }
+
+  // Update images in a transaction to avoid race conditions
+  if (currentPrimary) {
+    await currentPrimary.update({ is_primary: false }, { transaction });
+  }
+
+  await newPrimary.update({ is_primary: true }, { transaction });
+
+  return newPrimary;
+};
+
+export const deleteImage = async ({ image_id, soft = true }) => {
+
+  const image = await ProductImage.findByPk(image_id);
+
+  if (!image) {
+    throw new Error("Image not found");
+  }
+
+  if (soft) {
+    // Toggle the active state
+    const newStatus = !image.is_active;
+
+    // Update the image
+    await image.update({ is_active: newStatus });
+
+    return {
+      success: true,
+      message: `Image ${newStatus ? "activated" : "deactivated"} successfully`,
+      image: { id: image.id, is_active: newStatus }
+    };
+  } else {
+    // Hard delete
+    await image.destroy();
+
+    return {
+      success: true,
+      message: "Image deleted permanently"
+    };
+  }
+};

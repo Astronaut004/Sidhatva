@@ -2,7 +2,9 @@ import express from "express";
 import { 
   createProductImageHandler,
   getProductImageHandler,
-  updateProductImageHandler
+  updateProductImageHandler,
+  updatePrimaryImageHandler,
+  deleteProductImageHandler
 } from "../controllers/productImageController.js";
 
 import { protect } from "../middleware/authMiddleware.js";
@@ -17,5 +19,7 @@ router.post("/product-images", protect, authorize("admin", "vendor"), createProd
 router.get("/product-images/:product_id", getProductImageHandler);
 
 router.patch("/product-images/:product_id/image/:image_id", protect, authorize("admin", "vendor"), updateProductImageHandler);
+router.patch("/product-images/:product_id/primary/:image_id", protect, authorize("admin", "vendor"), updatePrimaryImageHandler);
+router.delete("/product-images/:product_id/image/:image_id", protect, authorize("admin", "vendor"), deleteProductImageHandler);
 
 export default router;
