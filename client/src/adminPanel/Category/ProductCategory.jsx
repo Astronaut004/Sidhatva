@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createCategory } from "../../slices/categoryslice";
 import { Link } from "react-router-dom"; // ✅ import Link
 
+const CategoryCreateForm = () => {
 const CreateCategory = () => {
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.category);
@@ -14,6 +15,10 @@ const CreateCategory = () => {
     seo_title: "",
     is_active: true,
   });
+
+  const dispatch = useDispatch();
+  const { loading, success, error } = useSelector((state) => state.categories);
+  const { token } = useSelector((state) => state.auth);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
