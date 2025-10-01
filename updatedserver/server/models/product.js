@@ -87,12 +87,6 @@ export default (sequelize) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      weight: {
-        type: DataTypes.DECIMAL(10, 3),
-      },
-      dimensions: {
-        type: DataTypes.JSON, // { length, width, height }
-      },
       shipping_required: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
@@ -161,6 +155,12 @@ export default (sequelize) => {
       seo_description: {
         type: DataTypes.TEXT,
       },
+      excerpt: { type: DataTypes.TEXT },
+      upsell_ids: { type: DataTypes.ARRAY(DataTypes.BIGINT) },
+      crosssell_ids: { type: DataTypes.ARRAY(DataTypes.BIGINT) },
+      purchase_note: { type: DataTypes.TEXT },
+      post_content: { type: DataTypes.TEXT },
+      images: { type: DataTypes.JSON },
       created_by: {
         type: DataTypes.BIGINT,
         references: { model: "users", key: "id" },
@@ -177,7 +177,7 @@ export default (sequelize) => {
     },
     {
       tableName: "products",
-      timestamps: false, // you already manage created_at, updated_at manually
+      timestamps: true, // you already manage created_at, updated_at manually
       underscored: true, // ensures Sequelize maps snake_case columns properly
     }
   );
