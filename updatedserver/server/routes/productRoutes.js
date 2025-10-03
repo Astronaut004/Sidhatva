@@ -9,10 +9,10 @@ const router = express.Router();
 
 router.post(
   "/",
-  createProductValidator,
-  handleValidationErrors,
   protect,
   authorize("admin", "vendor"),
+  // createProductValidator,
+  // handleValidationErrors,
   createProductHandler
 );
 
