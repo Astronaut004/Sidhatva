@@ -1,6 +1,7 @@
 // models/product.js
 import { DataTypes } from "sequelize";
 
+
 export default (sequelize) => {
   const Product = sequelize.define(
     "Product",
@@ -183,27 +184,51 @@ export default (sequelize) => {
   );
 
   // Associations
-  Product.associate = (models) => {
-    // Category is always present
-    Product.belongsTo(models.ProductCategory, {
-      foreignKey: "category_id",
-      allowNull: false,
-    });
+Product.associate = (models) => {
+  // BelongsTo associations
+  Product.belongsTo(models.ProductCategory, { foreignKey: "category_id", allowNull: false });
+  
+  if (models.SubCategory) {
+    Product.belongsTo(models.SubCategory, { foreignKey: "sub_category_id", allowNull: true });
+  }
 
-    // SubCategory is optional
-    if (models.SubCategory) {
-      Product.belongsTo(models.SubCategory, {
-        foreignKey: "sub_category_id",
-        allowNull: true,
-      });
-    }
+  Product.belongsTo(models.Brand, { foreignKey: "brand_id" });
+  Product.belongsTo(models.Material, { foreignKey: "material_id" });
+  Product.belongsTo(models.Color, { foreignKey: "color_id" });
+  Product.belongsTo(models.User, { foreignKey: "created_by" });
 
-    Product.belongsTo(models.Brand, { foreignKey: "brand_id" });
-    Product.belongsTo(models.Material, { foreignKey: "material_id" });
-    Product.belongsTo(models.Color, { foreignKey: "color_id" });
-    Product.belongsTo(models.User, { foreignKey: "created_by" });
-  };
+  // HasOne / HasMany associations
+  Product.hasOne(models.FurnitureProduct, { foreignKey: "product_id", as: "FurnitureProduct" });
+  Product.hasOne(models.ElectronicsProduct, { foreignKey: "product_id", as: "ElectronicsProduct" });
+  Product.hasOne(models.HomeDecorProduct, { foreignKey: "product_id", as: "HomeDecorProduct" });
+  Product.hasMany(models.ProductImage, { foreignKey: "product_id", as: "product_images" });
+};
 
+  // Product.associate = (models) => {
+  //   // Category is always present
+  //   Product.belongsTo(models.ProductCategory, {
+  //     foreignKey: "category_id",
+  //     allowNull: false,
+  //   });
+
+  //   // SubCategory is optional
+  //   if (models.SubCategory) {
+  //     Product.belongsTo(models.SubCategory, {
+  //       foreignKey: "sub_category_id",
+  //       allowNull: true,
+  //     });
+  //   }
+
+  //   Product.belongsTo(models.Brand, { foreignKey: "brand_id" });
+  //   Product.belongsTo(models.Material, { foreignKey: "material_id" });
+  //   Product.belongsTo(models.Color, { foreignKey: "color_id" });
+  //   Product.belongsTo(models.User, { foreignKey: "created_by" });
+  //   Product.associate = (models) => {
+  //     Product.hasOne(models.FurnitureProduct, { foreignKey: "product_id", as: "FurnitureProduct" });
+  //     Product.hasOne(models.ElectronicsProduct, { foreignKey: "product_id", as: "ElectronicsProduct" });
+  //     Product.hasOne(models.HomeDecorProduct, { foreignKey: "product_id", as: "HomeDecorProduct" });
+  //     Product.hasMany(models.ProductImage, { foreignKey: "product_id", as: "product_images" });
+  //   };
 
   return Product;
 };

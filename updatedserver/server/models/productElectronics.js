@@ -56,13 +56,20 @@ export default (sequelize) => {
         }
     );
 
-    ElectronicsProduct.associate = (models) => {
-        ElectronicsProduct.belongsTo(models.product, {
-            foreignKey: "product_id",
-            as: "product",
-            onDelete: "CASCADE",
-        });
-    };
+  ElectronicsProduct.associate = (models) => {
+    ElectronicsProduct.belongsTo(models.Product, { foreignKey: "product_id", as: "product" });
+
+    ElectronicsProduct.hasOne(models.ElectronicsCharacteristics, {
+      foreignKey: "electronics_id",
+      as: "Characteristics",
+    });
+
+    ElectronicsProduct.hasOne(models.ElectronicsTechnicalData, {
+      foreignKey: "electronics_id",
+      as: "TechnicalData",
+    });
+  };
+    
 
     return ElectronicsProduct;
 };
