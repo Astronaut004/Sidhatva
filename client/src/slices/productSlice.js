@@ -1,75 +1,102 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
-// 🔹 Async thunk for creating product
+// ✅ Base URL — adjust if needed
+const API_URL = "http://localhost:5001/api/products";
+
+// --------------------
+// 🔹 Create Product
+// --------------------
 export const createProduct = createAsyncThunk(
-  "products/createProduct",
-  async ({ productData, token }, { rejectWithValue }) => {
+  "product/createProduct",
+  async (productData, { rejectWithValue }) => {
     try {
-      // Convert some fields to numbers (backend may reject string values)
-      const payload = {
-        ...productData,
-        category_id: Number(productData.category_id),
-        cost_price: Number(productData.cost_price),
-        selling_price: Number(productData.selling_price),
-        dimensions: {
-          length: Number(productData.dimensions.length) || 0,
-          width: Number(productData.dimensions.width) || 0,
-          height: Number(productData.dimensions.height) || 0,
-        },
-      };
-
-      const res = await fetch("http://localhost:5001/api/products", {
-        method: "POST",
+      console.log("Creating Product with Data:", productData);
+      const response = await axios.post(API_URL, productData, {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: token ? `Bearer ${token}` : "",
-        },
-        body: JSON.stringify(payload),
+          Authorization: `Bearer ${productData.token}`,
+           "Content-Type": "application/json" },
       });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        return rejectWithValue(data.message || "❌ Failed to create product");
-      }
-
-      return data; // return success response
-    } catch (err) {
-      return rejectWithValue("⚠️ Server error. Try again.");
+      console.log("Create Product Response:", response);
+      return response.data;
+    } catch (error) {
+      console.error("Create Product Error:", error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to create product"
+      );
     }
   }
 );
 
+// --------------------
+// 🔹 Get All Products (Optional for listing)
+// --------------------
+export const fetchProducts = createAsyncThunk(
+  "product/fetchProducts",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(API_URL);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch products"
+      );
+    }
+  }
+);
+
+// --------------------
+// 🧩 Slice Definition
+// --------------------
 const productSlice = createSlice({
-  name: "products",
+  name: "product",
   initialState: {
+    products: [],
     loading: false,
+    success: false,
     error: null,
-    successMessage: null,
   },
   reducers: {
-    clearMessages: (state) => {
+    resetStatus: (state) => {
+      state.loading = false;
+      state.success = false;
       state.error = null;
-      state.successMessage = null;
     },
   },
   extraReducers: (builder) => {
+    // ✅ Create Product
     builder
       .addCase(createProduct.pending, (state) => {
         state.loading = true;
+        state.success = false;
         state.error = null;
-        state.successMessage = null;
       })
       .addCase(createProduct.fulfilled, (state, action) => {
         state.loading = false;
-        state.successMessage = "✅ Product created successfully!";
+        state.success = true;
+        state.products.push(action.payload); // add new product to state
       })
       .addCase(createProduct.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "❌ Something went wrong";
+        state.error = action.payload;
+      });
+
+    // ✅ Fetch Products
+    builder
+      .addCase(fetchProducts.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchProducts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.products = action.payload;
+      })
+      .addCase(fetchProducts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
 
-export const { clearMessages } = productSlice.actions;
+export const { resetStatus } = productSlice.actions;
 export default productSlice.reducer;
