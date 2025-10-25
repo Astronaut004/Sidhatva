@@ -6,7 +6,7 @@ import categoryReducer from "../slices/categoryslice";
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    products: productReducer,
+    product: productReducer,
     category: categoryReducer,
   },
 });

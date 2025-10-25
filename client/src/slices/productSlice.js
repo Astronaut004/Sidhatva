@@ -12,10 +12,12 @@ export const createProduct = createAsyncThunk(
   async (productData, { rejectWithValue }) => {
     try {
       console.log("Creating Product with Data:", productData);
+      console.log("the token: ", productData.token);
+      
       const response = await axios.post(API_URL, productData, {
         headers: {
           Authorization: `Bearer ${productData.token}`,
-           "Content-Type": "application/json" },
+          "Content-Type": "application/json" },
       });
       console.log("Create Product Response:", response);
       return response.data;
