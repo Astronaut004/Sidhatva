@@ -5,6 +5,7 @@ import { createProduct, resetStatus } from "../../slices/productSlice";
 function ProductCreate() {
   const dispatch = useDispatch();
   const { loading, success, error } = useSelector((state) => state.product);
+  const { token } = useSelector((state) => state.auth);
 
   const [categoryType, setCategoryType] = useState("");
   const [form, setForm] = useState({
@@ -64,6 +65,7 @@ function ProductCreate() {
       product: form.product,
       image: form.image,
       ...(categoryType && { [categoryType]: form[categoryType] }),
+      token,
     };
     dispatch(createProduct(payload));
   };

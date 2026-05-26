@@ -1,8 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// ✅ Base URL — adjust if needed
-const API_URL = "http://localhost:5001/api/products";
+const API_URL = `${import.meta.env.VITE_BACKEND_API || "http://localhost:5000"}/api/products`;
 
 // --------------------
 // 🔹 Create Product

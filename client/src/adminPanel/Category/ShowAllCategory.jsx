@@ -4,7 +4,7 @@ import {
   getAllCategories,
   updateCategory,
   deleteCategory,
-} from "../../slices/categoryslice";
+} from "../../slices/categorySlice";
 import { Link } from "react-router-dom"; // ✅ FIXED: Import Link
 
 const ShowAllCategory = () => {

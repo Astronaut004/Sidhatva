@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_URL = "http://localhost:5001/api";
+const API_URL = `${import.meta.env.VITE_BACKEND_API || "http://localhost:5000"}/api`;
 
 // 🔹 Create Category
 // categorySlice.js
@@ -10,7 +10,7 @@ export const createCategory = createAsyncThunk(
   async ({ categoryData, token }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:5001/api/category/create-category",
+        `${API_URL}/category/create-category`,
         categoryData,
         {
           headers: {

@@ -6,7 +6,7 @@ export default function Chatbot() {
 
   const sendQuery = async (endpoint, payload = {}) => {
     try {
-      const res = await fetch(`http://localhost:5001/api/chat/${endpoint}`, {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_API || "http://localhost:5000"}/api/chat/${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

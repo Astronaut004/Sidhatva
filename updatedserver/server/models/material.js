@@ -28,7 +28,7 @@ export default (sequelize, DataTypes) => {
       created_by: {
         type: DataTypes.BIGINT,
         references: {
-          model: "Users", // Must match your users table/model
+          model: "users",
           key: "id",
         },
         onDelete: "SET NULL",

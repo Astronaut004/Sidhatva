@@ -5,11 +5,12 @@ import { generateOtp } from '../utils/otpGenerator.js';
 import { Op } from "sequelize";
 import { sendOtpEmail } from '../utils/sendEmail.js';
 import generateToken from '../utils/generateToken.js';
+import AppError from '../utils/AppError.js';
 
 
 export const registerUser = async ({ email, phone, password, role }) => {
   if (!email && !phone) {
-    throw new Error(`Email or phone is required ${email} ${phone}}`);
+    throw new AppError("Email or phone is required", 400);
   }
 
   // Check if user already exists
@@ -21,7 +22,7 @@ export const registerUser = async ({ email, phone, password, role }) => {
   });
 
   if (existingUser) {
-    throw new Error('User already exists');
+    throw new AppError("User already exists", 409);
   }
 
   // If password is provided → hash it
@@ -30,10 +31,10 @@ export const registerUser = async ({ email, phone, password, role }) => {
     hash = await bcrypt.hash(password, 10);
   }
   if (!password || password.trim() === "") {
-    throw new Error("Password is required");
+    throw new AppError("Password is required", 400);
   }
   if (password.length < 6) {
-    throw new Error("Password must be at least 6 characters");
+    throw new AppError("Password must be at least 6 characters", 400);
   }
 
   // Validate role (only allow predefined ones)
@@ -74,10 +75,10 @@ export const loginUser = async ({ email, phone, password }) => {
   const user = await User.findOne({
     where: email ? { email } : { phone },
   });
-  if (!user) throw new Error(`User not found ${email} ${phone}`);
+  if (!user) throw new AppError("User not found", 404);
 
   const isValid = password ? await bcrypt.compare(password, user.password_hash) : false;
-  if (!isValid) throw new Error(`Invalid credentials ${password} ${phone}`);
+  if (!isValid) throw new AppError("Invalid credentials", 401);
 
   const token = generateToken({ id: user.id, role: user.role });
   return { token, user };
@@ -94,7 +95,7 @@ export const sendOtp = async ({ identifier, purpose }) => {
   } else if (/^\+?\d{10,15}$/.test(identifier)) {
     identifier_type = "phone";
   } else {
-    throw new Error("Invalid identifier. Must be email or phone.");
+    throw new AppError("Invalid identifier. Must be email or phone.", 400);
   }
 
   // --- Check rate limit (max 3 requests in 3 hours) ---
@@ -110,7 +111,7 @@ export const sendOtp = async ({ identifier, purpose }) => {
   });
 
   if (otpCount >= 3) {
-    throw new Error("Max OTP attempts reached. Please try again after 3 hours.");
+    throw new AppError("Max OTP attempts reached. Please try again after 3 hours.", 429);
   }
 
   // --- Generate new OTP ---
@@ -130,7 +131,7 @@ export const sendOtp = async ({ identifier, purpose }) => {
   }
 
   if (identifier_type === "phone") {
-    throw new Error("Phone OTP is not supported yet.");
+    throw new AppError("Phone OTP is not supported yet.", 501);
   }
 
   // TODO: send otpCode via email/SMS
@@ -155,19 +156,19 @@ export const verifyOtpAndLogin = async ({ identifier, otp, purpose = "login", ro
     });
 
     if (!otpRecord) {
-      throw new Error("Invalid or expired OTP");
+      throw new AppError("Invalid or expired OTP", 400);
     }
 
     // Check attempts
     if (otpRecord.attempts >= otpRecord.max_attempts) {
-      throw new Error("OTP locked due to too many attempts");
+      throw new AppError("OTP locked due to too many attempts", 429);
     }
 
     // Wrong OTP case
     if (otpRecord.otp_code !== otp) {
       otpRecord.attempts += 1;
       await otpRecord.save();
-      throw new Error("Incorrect OTP");
+      throw new AppError("Incorrect OTP", 400);
     }
 
     // Mark OTP as used
@@ -215,7 +216,7 @@ export const verifyOtpAndLogin = async ({ identifier, otp, purpose = "login", ro
 
   } catch (error) {
     console.error(error);
-    throw new Error(error.message || "Server error");
+    throw error;
   }
 };
 

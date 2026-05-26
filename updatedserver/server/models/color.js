@@ -34,7 +34,7 @@ export default (sequelize, DataTypes) => {
       created_by: {
         type: DataTypes.BIGINT,
         references: {
-          model: "Users",
+          model: "users",
           key: "id",
         },
         onDelete: "SET NULL",

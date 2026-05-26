@@ -1,6 +1,7 @@
 import asyncHandler from '../utils/asyncHandler.js';
 import * as wishlistService from '../services/wishlistService.js';
 import ApiResponse from '../utils/apiResponse.js';
+import AppError from '../utils/AppError.js';
 
 const getWishlist = asyncHandler(async (req, res) => {
   const userId = req.user.id;
@@ -11,10 +12,7 @@ const getWishlist = asyncHandler(async (req, res) => {
 const addItem = asyncHandler(async (req, res) => {
   const userId = req.user.id;
   const { productId } = req.body;
-  if (!productId) {
-    res.status(400);
-    throw new Error("Product ID is required.");
-  }
+  if (!productId) throw new AppError("Product ID is required.", 400);
   const updatedWishlist = await wishlistService.addItemToWishlist(userId, { productId });
   res.status(200).json(new ApiResponse(200, updatedWishlist, "Item added to wishlist."));
 });

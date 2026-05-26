@@ -1,6 +1,7 @@
 import * as authService from "../services/authService.js";
 import ApiResponse from "../utils/apiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js";
+import AppError from "../utils/AppError.js";
 
 // export const register = asyncHandler(async (req, res) => {
 //     const { email, phone, password, role} = req.body;
@@ -20,7 +21,7 @@ export const register = asyncHandler(async (req, res) => {
     } else if (/^\+?\d{10,15}$/.test(identifier)) {
         phone = identifier;
     } else {
-        throw new Error("Invalid identifier. Must be a valid email or phone number");
+        throw new AppError("Invalid identifier. Must be a valid email or phone number", 400);
     }
 
     const result = await authService.registerUser({ email, phone, password, role });

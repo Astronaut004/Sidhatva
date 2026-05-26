@@ -31,8 +31,7 @@ const Profile = () => {
     const [orders, setOrders] = useState([]);
     const [wishlistItems, setWishlistItems] = useState([]);
 
-    // API Base URL
-    const API_BASE_URL = 'http://localhost:3001/api';
+    const API_BASE_URL = `${import.meta.env.VITE_BACKEND_API || "http://localhost:5000"}/api`;
 
     // API Helper Functions
     const apiCall = async (endpoint, options = {}) => {

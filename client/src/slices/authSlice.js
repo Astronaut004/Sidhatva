@@ -2,7 +2,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_BASE = import.meta.env.VITE_BACKEND_API || "http://localhost:5001";
+const API_BASE = import.meta.env.VITE_BACKEND_API || "http://localhost:5000";
 
 const initialState = {
   user: JSON.parse(localStorage.getItem("user")) || null,

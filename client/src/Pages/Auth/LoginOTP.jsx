@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import {sendOtpApi,verifyOtpApi, loginSuccess } from "../../slices/authSlice"; // adjust path
 import AlertBox from "../../ui/AlertBox";
 
-const API_BASE = import.meta.env.VITE_BACKEND_API || "http://localhost:5001";
+const API_BASE = import.meta.env.VITE_BACKEND_API || "http://localhost:5000";
 
 const LoginOTPPage = () => {
   const [identifier, setIdentifier] = useState("");

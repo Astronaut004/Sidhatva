@@ -16,7 +16,7 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.BIGINT,
         allowNull: false,
         references: {
-          model: "ProductCategories", // table name OR Sequelize model
+          model: "product_categories",
           key: "id",
         },
         onDelete: "CASCADE",
@@ -43,7 +43,7 @@ export default (sequelize, DataTypes) => {
       created_by: {
         type: DataTypes.BIGINT,
         references: {
-          model: "Users",
+          model: "users",
           key: "id",
         },
         onDelete: "SET NULL",
